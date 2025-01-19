@@ -33,6 +33,7 @@ let dividedWidth;
 let gameRunCount = 0;
 let ballonClickEventCount = 0;
 let changeLeft;
+let offsetWidthbinding;
 toHome.addEventListener('click', event => {
   gameRunCount = 0
   cancelAnimationFrame(animation);
@@ -77,11 +78,12 @@ function gameplay(event) {
   innerWidthb = innerWidth;
   dividedWidth = innerWidthb / 12;
   allBallonList = Object.values(ballons);
+  offsetWidthbinding = allBallonList[0].offsetWidth;
   if (innerWidthb < 460) {
-    maxLeft = innerWidthb - allBallonList[0].offsetWidth + 10;
+    maxLeft = innerWidthb - offsetWidthbinding + 10;
   }
   else {
-    maxLeft = innerWidthb
+    maxLeft = innerWidthb - offsetWidthbinding;
   }
 
   for (let i = 0; i <= 11; i++) {
@@ -94,7 +96,7 @@ function gameplay(event) {
       value.addEventListener('click', (event) => {
         value.textContent = '💥';
         scoreCount += 1
-        score.textContent = 'Score: ' + scoreCount
+        score.textContent = 'Score: ' + scoreCount;
         if (scoreCount % 10 == 0) {
           level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
           upSpeed += 0.03;
@@ -149,13 +151,7 @@ function move(time, lasttime) {
   if (round > 600) {
     round = 0;
     innerWidthb = innerWidth;
-    if (innerWidthb < 460) {
-      maxLeft = innerWidthb - allBallonList[0].offsetWidth + 40;
-    }
-    else {
-      maxLeft = innerWidthb
-    }
-
+    maxLeft = innerWidthb - offsetWidthbinding;
   }
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
