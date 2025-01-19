@@ -27,9 +27,12 @@ let angle = Math.PI;
 let allBallonList;
 let upSpeed = 0.1;
 let sideSpeed = 0.001;
-let innerWidthb = innerWidth;
+let innerWidthBinding = innerWidth;
 let maxLeft;
 let left =0;
+let leftDataList = [];
+let startScreenWidth = innerWidth;
+let instantScreenWidth;
 let dividedWidth;
 let gameRunCount = 0;
 let changeLeft;
@@ -76,14 +79,14 @@ function gameplay(event) {
   game.style.display = 'block';
   game.style.height = innerHeight + 'px';
   gameRunCount += 1;
-  innerWidthb = innerWidth;
-  dividedWidth = innerWidthb / 12;
+  innerWidthBinding = innerWidth;
+  dividedWidth = innerWidthBinding / 12;
   offsetWidthbinding = allBallonList[0].offsetWidth;
-  if (innerWidthb < 460) {
-    maxLeft = innerWidthb - offsetWidthbinding + 10;
+  if (innerWidthBinding < 460) {
+    maxLeft = innerWidthBinding - offsetWidthbinding + 10;
   }
   else {
-    maxLeft = innerWidthb - offsetWidthbinding;
+    maxLeft = innerWidthBinding - offsetWidthbinding;
   }
 
   animation = requestAnimationFrame(move);
@@ -93,7 +96,7 @@ function move(time, lasttime) {
   left =0
   let i = 0;
   changeLeft = 0;
-  if (lasttime != null && innerWidthb > 460) {
+  if (lasttime != null && innerWidthBinding > 460) {
     angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(angle) * 60;
   }
@@ -102,15 +105,12 @@ function move(time, lasttime) {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed
     }
     if (left > maxLeft) {
-      left = dividedWidth;
+      left = 0;
     }
     ballon.style.top = heightData[i] + 'px';
     ballon.style.left = left + changeLeft + 'px';
     left += dividedWidth;
     i += 1;
-  }
-  if (left > maxLeft) {
-    left = dividedWidth
   }
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -100) {
@@ -125,8 +125,8 @@ function move(time, lasttime) {
   round += 1;
   if (round > 600) {
     round = 0;
-    innerWidthb = innerWidth;
-    maxLeft = innerWidthb - offsetWidthbinding - 10;
+    innerWidthBinding = innerWidth;
+    maxLeft = innerWidthBinding - offsetWidthbinding;
   }
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
