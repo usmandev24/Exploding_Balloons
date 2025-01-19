@@ -130,7 +130,7 @@ h1 {
 }
 
 .bal {
-  font-size: 5rem;
+  font-size: 7rem;
   display: inline;
   position: absolute;
   z-index: 1;
@@ -162,7 +162,7 @@ a {
   cursor: pointer;
 }
 
-@media only screen and (max-width : 420px) {
+@media only screen and (max-width : 480px) {
   nav>ul>li {
     color: darkred;
     padding: 2px 7px;
@@ -175,5 +175,8 @@ a {
   #pauseResume {
     max-width: 2rem;
     margin-left: -2rem;
+  }
+  .bal {
+    font-size: 4.5rem;
   }
 }

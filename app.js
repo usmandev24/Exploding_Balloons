@@ -116,12 +116,11 @@ function move(time, lasttime) {
     if (lasttime != null) {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
-    left = leftDataList[i];
-    if (left > maxLeft) {
-      left = left/Math.random()*10;
+    if (leftDataList[i] > maxLeft) {
+      leftDataList[i] = maxLeft/(1+Math.random()*10)
     }
     ballon.style.top = heightData[i] + 'px';
-    ballon.style.left = left + changeLeft + 'px';
+    ballon.style.left = leftDataList[i] + changeLeft + 'px';
     i += 1;
   }
   for (let i = 0; i < heightData.length; i++) {
@@ -174,8 +173,13 @@ window.addEventListener('load', event => {
       score.textContent = 'Score: ' + scoreCount;
       if (scoreCount % 10 == 0) {
         level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
-        upSpeed += 0.03;
-        sideSpeed += 0.0003;
+        if (innerWidthBinding < 460) {
+          upSpeed += 0.01;
+        sideSpeed += 0.0002;
+        } else {
+          upSpeed += 0.02;
+        sideSpeed += 0.0002;
+        }
       }
       event.preventDefault();
       let hide = setTimeout(() => {
@@ -189,4 +193,7 @@ window.addEventListener('mousedown', event => {
 })
 homepage.addEventListener('click', event => {
   items.style.display ='none'
+})
+game.addEventListener ('click', event => {
+  items.style.display ='none';
 })
