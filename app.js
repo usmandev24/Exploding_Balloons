@@ -34,8 +34,7 @@ let innerWidthBinding = innerWidth;
 let maxLeft;
 let left =0;
 let leftDataList = [];
-let startScreenWidth = innerWidth;
-let instantScreenWidth;
+
 let dividedWidth = innerWidthBinding/12
 let gameRunCount = 0;
 let changeLeft;
@@ -188,6 +187,6 @@ window.addEventListener('load', event => {
 window.addEventListener('mousedown', event => {
   event.preventDefault()
 })
-window.addEventListener('click', event => {
+homepage.addEventListener('click', event => {
   items.style.display ='none'
 })
