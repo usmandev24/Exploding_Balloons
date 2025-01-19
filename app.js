@@ -36,7 +36,7 @@ let left =0;
 let leftDataList = [];
 let startScreenWidth = innerWidth;
 let instantScreenWidth;
-let dividedWidth;
+let dividedWidth = innerWidthBinding/12
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
@@ -107,7 +107,6 @@ function gameplay(event) {
 }
 
 function move(time, lasttime) {
-  left =0
   let i = 0;
   changeLeft = 0;
   if (lasttime != null && innerWidthBinding > 460) {
@@ -116,19 +115,20 @@ function move(time, lasttime) {
   }
   for (let ballon of allBallonList) {
     if (lasttime != null) {
-      heightData[i] = heightData[i] - (time - lasttime) * upSpeed
+      heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
+    left = leftDataList[i];
     if (left > maxLeft) {
-      left = 0;
+      left = left/Math.random()*10;
     }
     ballon.style.top = heightData[i] + 'px';
     ballon.style.left = left + changeLeft + 'px';
-    left += dividedWidth;
     i += 1;
   }
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -100) {
       heightData[i] = innerHeight;
+      leftDataList[i] = innerWidthBinding/12 *Math.random()*10;
       if (allBallonList[i].textContent == '💥') {
         round += 1;
         allBallonList[i].textContent = '🎈';
@@ -165,7 +165,8 @@ window.addEventListener('load', event => {
   allBallonList = Object.values(ballons);
   for (let i = 0; i <= 11; i++) {
     height = innerHeight - Math.random() * innerHeight;
-    heightData.push(height)
+    heightData.push(height);
+    leftDataList.push(dividedWidth * Math.random()*10);
   }
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
