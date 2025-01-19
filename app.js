@@ -1,8 +1,10 @@
 //--------Manue Bar-----------------------------------------
 let manu = document.getElementById('manu');
-let stop = document.getElementById('stop')
-manu.addEventListener('click', () => {
-  let items = document.querySelector('#manuItems>ul')
+let stop = document.getElementById('stop');
+let items;
+manu.addEventListener('click', (event) => {
+  event.stopPropagation()
+  items = document.querySelector('#manuItems>ul')
   items.style.display = 'block';
   let close = document.querySelector('#imgclose')
   close.addEventListener('click', () => {
@@ -18,6 +20,7 @@ let homepage = document.getElementById('homepage');
 let toHome = document.getElementById('linktohome');
 let score = document.getElementById('score');
 let level = document.getElementById('level');
+let cover = document.getElementById('cover');
 let round = 1;
 let scoreCount = 0
 let ballons = {};
@@ -39,6 +42,7 @@ let changeLeft;
 let offsetWidthbinding;
 
 toHome.addEventListener('click', event => {
+  event.stopPropagation();
   gameRunCount = 0
   cancelAnimationFrame(animation);
   game.style.display = 'none';
@@ -48,12 +52,19 @@ toHome.addEventListener('click', event => {
   pauseResume.style.fontSize = '1.3rem';
   pauseResume.textContent = 'Resume';
   pauseResume.style.padding = '2px 1rem';
+  cover.style.display = 'none';
 })
 //-----------------------Game Events------------------
-start.addEventListener('click', event => gameplay(event));
+start.addEventListener('click', event =>{
+  event.stopPropagation()
+  gameplay(event)
+});
 pauseResume.addEventListener('click', event => {
+  event.stopPropagation();
   if (gameRunCount == 0) {
     gameplay(event)
+    cover.style.display = 'none';
+    
   } else if (gameRunCount == 1) {
     gameRunCount = 0
     cancelAnimationFrame(animation);
@@ -62,8 +73,11 @@ pauseResume.addEventListener('click', event => {
     pauseResume.style.fontSize = '1.3rem';
     pauseResume.textContent = 'Resume';
     pauseResume.style.padding = '2px 1rem';
+    cover.style.display = 'block';
+    cover.style.zIndex = 9
   }
   event.preventDefault();
+  
 
 })
 
@@ -123,7 +137,7 @@ function move(time, lasttime) {
     }
   }
   round += 1;
-  if (round > 600) {
+  if (round > 300) {
     round = 0;
     innerWidthBinding = innerWidth;
     maxLeft = innerWidthBinding - offsetWidthbinding;
@@ -172,4 +186,7 @@ window.addEventListener('load', event => {
 })
 window.addEventListener('mousedown', event => {
   event.preventDefault()
+})
+window.addEventListener('click', event => {
+  items.style.display ='none'
 })
