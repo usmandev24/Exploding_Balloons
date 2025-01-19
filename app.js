@@ -29,11 +29,12 @@ let upSpeed = 0.1;
 let sideSpeed = 0.001;
 let innerWidthb = innerWidth;
 let maxLeft;
+let left =0;
 let dividedWidth;
 let gameRunCount = 0;
-let ballonClickEventCount = 0;
 let changeLeft;
 let offsetWidthbinding;
+
 toHome.addEventListener('click', event => {
   gameRunCount = 0
   cancelAnimationFrame(animation);
@@ -77,7 +78,6 @@ function gameplay(event) {
   gameRunCount += 1;
   innerWidthb = innerWidth;
   dividedWidth = innerWidthb / 12;
-  allBallonList = Object.values(ballons);
   offsetWidthbinding = allBallonList[0].offsetWidth;
   if (innerWidthb < 460) {
     maxLeft = innerWidthb - offsetWidthbinding + 10;
@@ -86,36 +86,11 @@ function gameplay(event) {
     maxLeft = innerWidthb - offsetWidthbinding;
   }
 
-  for (let i = 0; i <= 11; i++) {
-    height = innerHeight - Math.random() * innerHeight;
-    heightData.push(height)
-  }
-  if (ballonClickEventCount == 0) {
-    ballonClickEventCount = 1
-    for (let value of allBallonList) {
-      value.addEventListener('click', (event) => {
-        value.textContent = '💥';
-        scoreCount += 1
-        score.textContent = 'Score: ' + scoreCount;
-        if (scoreCount % 10 == 0) {
-          level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
-          upSpeed += 0.03;
-          sideSpeed += 0.0003;
-        }
-        event.preventDefault();
-        let hide = setTimeout(() => {
-          value.style.display = 'none'
-        }, 200);
-      });
-    }
-  }
-
   animation = requestAnimationFrame(move);
 }
 
 function move(time, lasttime) {
-  let left = 0;
-  let explode = 0;
+  left =0
   let i = 0;
   changeLeft = 0;
   if (lasttime != null && innerWidthb > 460) {
@@ -151,11 +126,10 @@ function move(time, lasttime) {
   if (round > 600) {
     round = 0;
     innerWidthb = innerWidth;
-    maxLeft = innerWidthb - offsetWidthbinding;
+    maxLeft = innerWidthb - offsetWidthbinding - 10;
   }
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
-//-----------------------------------------------------------------------
 
 function wait(time) {
   return new Promise((resolve, reject) => {
@@ -173,6 +147,27 @@ window.addEventListener('load', event => {
     ballons[createbinding + i].className = 'bal'
     ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
     game.appendChild(ballons[createbinding + i]);
+  }
+  allBallonList = Object.values(ballons);
+  for (let i = 0; i <= 11; i++) {
+    height = innerHeight - Math.random() * innerHeight;
+    heightData.push(height)
+  }
+  for (let value of allBallonList) {
+    value.addEventListener('click', (event) => {
+      value.textContent = '💥';
+      scoreCount += 1
+      score.textContent = 'Score: ' + scoreCount;
+      if (scoreCount % 10 == 0) {
+        level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
+        upSpeed += 0.03;
+        sideSpeed += 0.0003;
+      }
+      event.preventDefault();
+      let hide = setTimeout(() => {
+        value.style.display = 'none'
+      }, 200);
+    });
   }
 })
 window.addEventListener('mousedown', event => {
