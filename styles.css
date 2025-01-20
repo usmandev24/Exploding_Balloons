@@ -58,7 +58,7 @@ nav>ul>li {
 }
 .bal>img {
   width: 7rem;
-  background-color: skyblue;
+  
   border-radius: 10px;
 }
 #manuItems>ul {
@@ -152,7 +152,7 @@ h1 {
   background-color: beige;
   width: 100vw;
   overflow: hidden;
-  background-image: url(images/background.svg);
+  background-image: url(images/lowcartoon.jpg);
   background-repeat: repeat;
   background-size: cover;
   margin-left: -8px;
@@ -220,6 +220,9 @@ a {
   .bal {
     font-size: 4rem;
   }
+  .bal>img {
+    width: 4.5rem;
+  }
   #gameOver {
     left: 1rem;
     padding: .5rem 0;
@@ -227,5 +230,8 @@ a {
   }
   #homepage {
     margin: .3rem;
+  } 
+  #game {
+    background-image: url(images/lowcartoon.jpg);
   }
 }
