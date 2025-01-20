@@ -56,7 +56,11 @@ nav>ul>li {
   width: 20;
   height: 20;
 }
-
+.bal>img {
+  width: 7rem;
+  background-color: skyblue;
+  border-radius: 10px;
+}
 #manuItems>ul {
   transition-property: 'display';
 

@@ -36,24 +36,27 @@ let innerWidthBinding = innerWidth;
 let maxLeft;
 let left = 0;
 let leftDataList = [];
-
 let dividedWidth = innerWidthBinding / 12
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
-
+over.style.left = (innerWidthBinding - over.offsetWidth)/2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
   gameRunCount = 0
   cancelAnimationFrame(animation);
   game.style.display = 'none';
   homepage.style.display = 'block';
-  pauseResume.style.background = 'yellow';
+  
   pauseResume.style.color = 'blue';
   pauseResume.style.fontSize = '1.3rem';
-  pauseResume.textContent = 'Resume';
+  if (pauseResume.textContent != 'Play') {
+    pauseResume.textContent = 'Resume';
+    pauseResume.style.background = 'yellow';
+  }
   pauseResume.style.padding = '2px 1rem';
   cover.style.display = 'none';
+  over.style.display = 'none'
 })
 //-----------------------Game Events------------------
 start.addEventListener('click', event => {
@@ -162,9 +165,14 @@ window.addEventListener('load', event => {
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
     if (i == 3) {
-      ballons[createbinding + i].appendChild(document.createTextNode('🕊️'))
+      let bird = document.createElement('img');
+
+      bird.setAttribute('src',"/images/bird.png");
+      ballons[createbinding + i].appendChild(bird);
     } else if (i == 9 || i == 11) {
-      ballons[createbinding + i].appendChild(document.createTextNode('🐥'))
+      let baby = document.createElement('img');
+      baby.setAttribute('src', "/images/baby.png");
+      ballons[createbinding + i].appendChild(baby);
     } else {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
     }
@@ -204,13 +212,8 @@ window.addEventListener('load', event => {
       }
       event.preventDefault();
     });
-    if (value.textContent == '🐥' || value.textContent == '🕊️') {
-      value.style.backgroundColor = 'skyblue';
-      value.style.borderRadius = '10px';
-      
-    }
   }
-});game.style.borderRadius
+});
 function gameReset() {
   upSpeed = 0.1;
   sideSpeed = 0.001;
@@ -224,7 +227,8 @@ function gameReset() {
   pauseResume.textContent = 'Play';
   pauseResume.style.padding = '2px 1rem';
   cover.style.display = 'block';
-  cover.style.zIndex = 9
+  cover.style.zIndex = 9;
+  over.style.left = (innerWidthBinding - over.offsetWidth)/2
 }
 window.addEventListener('mousedown', event => {
   event.preventDefault()
