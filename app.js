@@ -21,6 +21,8 @@ let toHome = document.getElementById('linktohome');
 let score = document.getElementById('score');
 let level = document.getElementById('level');
 let cover = document.getElementById('cover');
+let again = document.getElementById('again');
+let over = document.getElementById('gameOver');
 let round = 1;
 let scoreCount = 0
 let ballons = {};
@@ -32,10 +34,10 @@ let upSpeed = 0.1;
 let sideSpeed = 0.001;
 let innerWidthBinding = innerWidth;
 let maxLeft;
-let left =0;
+let left = 0;
 let leftDataList = [];
 
-let dividedWidth = innerWidthBinding/12
+let dividedWidth = innerWidthBinding / 12
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
@@ -54,7 +56,7 @@ toHome.addEventListener('click', event => {
   cover.style.display = 'none';
 })
 //-----------------------Game Events------------------
-start.addEventListener('click', event =>{
+start.addEventListener('click', event => {
   event.stopPropagation()
   gameplay(event)
 });
@@ -63,7 +65,7 @@ pauseResume.addEventListener('click', event => {
   if (gameRunCount == 0) {
     gameplay(event)
     cover.style.display = 'none';
-    
+
   } else if (gameRunCount == 1) {
     gameRunCount = 0
     cancelAnimationFrame(animation);
@@ -76,13 +78,15 @@ pauseResume.addEventListener('click', event => {
     cover.style.zIndex = 9
   }
   event.preventDefault();
-  
+
 
 })
 
 //--------------Game Fucntions---------
 function gameplay(event) {
   event.preventDefault()
+  cover.style.display = 'none'
+  over.style.display = 'none';
   homepage.style.display = 'none';
   pauseResume.style.background = 'blue';
   pauseResume.style.color = 'white';
@@ -117,7 +121,7 @@ function move(time, lasttime) {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
     if (leftDataList[i] > maxLeft) {
-      leftDataList[i] = maxLeft/(1+Math.random()*10)
+      leftDataList[i] = maxLeft / (1 + Math.random() * 10)
     }
     ballon.style.top = heightData[i] + 'px';
     ballon.style.left = leftDataList[i] + changeLeft + 'px';
@@ -126,7 +130,7 @@ function move(time, lasttime) {
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -100) {
       heightData[i] = innerHeight;
-      leftDataList[i] = innerWidthBinding/12 *Math.random()*10;
+      leftDataList[i] = innerWidthBinding / 12 * Math.random() * 10;
       if (allBallonList[i].textContent == '💥') {
         round += 1;
         allBallonList[i].textContent = '🎈';
@@ -157,40 +161,81 @@ window.addEventListener('load', event => {
     ballons[createbinding + i] = document.createElement('div');
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
-    ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
+    if (i == 3) {
+      ballons[createbinding + i].appendChild(document.createTextNode('🕊️'))
+    } else if (i == 9 || i == 11) {
+      ballons[createbinding + i].appendChild(document.createTextNode('🐥'))
+    } else {
+      ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
+    }
+
     game.appendChild(ballons[createbinding + i]);
   }
   allBallonList = Object.values(ballons);
   for (let i = 0; i <= 11; i++) {
     height = innerHeight - Math.random() * innerHeight;
     heightData.push(height);
-    leftDataList.push(dividedWidth * Math.random()*10);
+    leftDataList.push(dividedWidth * Math.random() * 10);
   }
   for (let value of allBallonList) {
+
     value.addEventListener('click', (event) => {
-      value.textContent = '💥';
-      scoreCount += 1
-      score.textContent = 'Score: ' + scoreCount;
-      if (scoreCount % 10 == 0) {
-        level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
-        if (innerWidthBinding < 460) {
-          upSpeed += 0.01;
-        sideSpeed += 0.0002;
-        } else {
-          upSpeed += 0.02;
-        sideSpeed += 0.0002;
+      if (value.textContent == '🎈') {
+        value.textContent = '💥';
+        scoreCount += 1
+        score.textContent = 'Score: ' + scoreCount;
+        if (scoreCount % 10 == 0) {
+          level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
+          if (innerWidthBinding < 460) {
+            upSpeed += 0.005;
+            sideSpeed += 0.0001;
+          } else {
+            upSpeed += 0.005;
+            sideSpeed += 0.0001;
+          }
         }
+        let hide = setTimeout(() => {
+          value.style.display = 'none'
+        }, 200);
+      } else {
+        cancelAnimationFrame(animation);
+        over.style.display = 'block';
+        gameReset();
       }
       event.preventDefault();
-      let hide = setTimeout(() => {
-        value.style.display = 'none'
-      }, 200);
     });
+    if (value.textContent == '🐥' || value.textContent == '🕊️') {
+      value.style.backgroundColor = 'skyblue';
+      value.style.borderRadius = '10px';
+      
+    }
   }
-})
+});game.style.borderRadius
+function gameReset() {
+  upSpeed = 0.1;
+  sideSpeed = 0.001;
+  scoreCount = 0;
+  gameRunCount = 0;
+  score.textContent = 'Score: ' + scoreCount;
+  level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
+  pauseResume.style.background = 'white';
+  pauseResume.style.color = 'blue';
+  pauseResume.style.fontSize = '1.3rem';
+  pauseResume.textContent = 'Play';
+  pauseResume.style.padding = '2px 1rem';
+  cover.style.display = 'block';
+  cover.style.zIndex = 9
+}
 window.addEventListener('mousedown', event => {
   event.preventDefault()
 })
 homepage.addEventListener('click', event => {
-  items.style.display ='none'
+  items.style.display = 'none';
 })
+toHome.addEventListener('click', event => {
+  event.stopPropagation();
+  setTimeout(() => {
+    items.style.display = 'none';
+  }, 100);
+})
+again.addEventListener('click', gameplay)

@@ -70,7 +70,7 @@ nav>ul>li {
   border: 1px solid #e4e4e4;
   border-radius: 5px;
   height: 90%;
-  z-index: 10;
+  z-index: 15;
   transition-duration: 3ms;
 }
 
@@ -134,8 +134,9 @@ h1 {
   display: inline;
   position: absolute;
   z-index: 1;
-  box-sizing: content-box;
-
+  box-sizing:content-box;
+  width: min-content;
+  padding: -10px;
 }
 
 .bal:hover {
@@ -161,7 +162,38 @@ a {
 #linktohome:hover {
   cursor: pointer;
 }
-
+#gameOver {
+  display: none;
+  position: absolute;
+  top: 25vh;
+  left: 20vw;
+  z-index: 10;
+  text-align: center;
+  margin: auto;
+  background-color: #0f2469;
+  padding: 2rem 1rem;
+  max-width: 50rem;
+  min-width: 20rem;
+  height:max-content;
+  border-radius: 20px;
+  color: rgb(24, 23, 48);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+#gameOver>button {
+  width: 11rem;
+  height: 3rem;
+}
+#gameOver>h2 {
+  margin-top: .4rem;
+  color: darkred;
+  background-color: #fff3db;
+  padding: 5px;
+  border-radius: 10px;
+}
+#gameOver>h3 {
+  border-bottom: 1px solid darkred;
+  padding-bottom: .5rem;
+}
 @media only screen and (max-width : 480px) {
   nav>ul>li {
     color: darkred;
@@ -177,6 +209,11 @@ a {
     margin-left: -2rem;
   }
   .bal {
-    font-size: 4.5rem;
+    font-size: 4rem;
+  }
+  #gameOver {
+    left: 1rem;
+    padding: .5rem 0;
+    width: 20rem;
   }
 }
