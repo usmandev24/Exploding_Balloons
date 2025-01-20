@@ -167,11 +167,11 @@ window.addEventListener('load', event => {
     if (i == 3) {
       let bird = document.createElement('img');
 
-      bird.setAttribute('src',"/images/bird.png");
+      bird.setAttribute('src',"/images/bird.jpg");
       ballons[createbinding + i].appendChild(bird);
     } else if (i == 9 || i == 11) {
       let baby = document.createElement('img');
-      baby.setAttribute('src', "/images/baby.png");
+      baby.setAttribute('src', "/images/baby.jpg");
       ballons[createbinding + i].appendChild(baby);
     } else {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
@@ -185,6 +185,7 @@ window.addEventListener('load', event => {
     heightData.push(height);
     leftDataList.push(dividedWidth * Math.random() * 10);
   }
+  over.style.left = (innerWidthBinding - over.offsetWidth)/2
   for (let value of allBallonList) {
 
     value.addEventListener('click', (event) => {
