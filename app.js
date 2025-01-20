@@ -194,6 +194,3 @@ window.addEventListener('mousedown', event => {
 homepage.addEventListener('click', event => {
   items.style.display ='none'
 })
-game.addEventListener ('click', event => {
-  items.style.display ='none';
-})
