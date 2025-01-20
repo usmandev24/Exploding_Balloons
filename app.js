@@ -167,11 +167,11 @@ window.addEventListener('load', event => {
     if (i == 3) {
       let bird = document.createElement('img');
 
-      bird.setAttribute('src',"/images/bird.jpg");
+      bird.setAttribute('src',"images/bird.jpg");
       ballons[createbinding + i].appendChild(bird);
     } else if (i == 9 || i == 11) {
       let baby = document.createElement('img');
-      baby.setAttribute('src', "/images/baby.jpg");
+      baby.setAttribute('src', "images/baby.jpg");
       ballons[createbinding + i].appendChild(baby);
     } else {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
