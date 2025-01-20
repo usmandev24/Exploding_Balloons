@@ -140,7 +140,7 @@ h1 {
   z-index: 1;
   box-sizing:content-box;
   width: min-content;
-  padding: -10px;
+  
 }
 
 .bal:hover {
@@ -177,7 +177,7 @@ a {
   z-index: 10;
   text-align: center;
   margin: auto;
-  background-color: #003cff;
+  background-color: #0046dd;
   padding: 2rem 1rem;
   max-width: 50rem;
   min-width: 20rem;
@@ -185,11 +185,19 @@ a {
   border-radius: 20px;
   color: rgb(24, 23, 48);
   font-family: Georgia, 'Times New Roman', Times, serif;
-  border: 1px solid gray;
+  
+  box-shadow: .5rem .5rem 1rem #313131;
 }
 #gameOver>button {
-  width: 11rem;
-  height: 3rem;
+  width: 9rem;
+  height: 2rem;
+  background-color: white;
+}
+button {
+  transition: background-color 0.3s ease-out 0;
+}
+button:active {
+  background-color: #b3b3b3;
 }
 #gameOver>h2 {
   margin-top: .4rem;
