@@ -137,7 +137,7 @@ h1 {
   display: inline;
   position: absolute;
   z-index: 1;
-  box-sizing:content-box;
+  box-sizing:border-box;
   width: min-content;
   
 }

@@ -36,11 +36,11 @@ let innerWidthBinding = innerWidth;
 let maxLeft;
 let left = 0;
 let leftDataList = [];
-let dividedWidth = innerWidthBinding / 12
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
-let multiplyer;
+// tells us how much elements ballons or bird can be placed in a line with given innerheight
+let elementsNum ;
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
@@ -82,8 +82,6 @@ pauseResume.addEventListener('click', event => {
     cover.style.zIndex = 9
   }
   event.preventDefault();
-
-
 })
 
 //--------------Game Fucntions---------
@@ -101,10 +99,8 @@ function gameplay(event) {
   game.style.height = innerHeight + 'px';
   gameRunCount += 1;
   innerWidthBinding = innerWidth;
-  dividedWidth = innerWidthBinding / 12;
   offsetWidthbinding = allBallonList[0].offsetWidth;
-  maxLeft = innerWidthBinding - offsetWidthbinding;
-  
+  maxLeft = innerWidthBinding - offsetWidthbinding - 40
   animation = requestAnimationFrame(move);
 }
 
@@ -120,7 +116,7 @@ function move(time, lasttime) {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
     if (leftDataList[i] > maxLeft) {
-      leftDataList[i] = maxLeft / ( 1 + Math.random() * 10)
+      leftDataList[i] = Math.floor(Math.random() * maxLeft)
     }
     ballon.style.top = heightData[i] + 'px';
     ballon.style.left = leftDataList[i] + changeLeft + 'px';
@@ -134,7 +130,8 @@ function move(time, lasttime) {
       } else {
         heightData[i] = innerHeight
       }
-      leftDataList[i] = innerWidthBinding / 12 * random * 10;
+      leftDataList[i] = Math.floor(random * maxLeft)
+      console.log(offsetWidthbinding, maxLeft, leftDataList[i])
       if (allBallonList[i].textContent == '💥') {
         round += 1;
         allBallonList[i].textContent = '🎈';
@@ -143,10 +140,10 @@ function move(time, lasttime) {
     }
   }
   round += 1;
-  if (round > 500) {
+  if (round > 300) {
     round = 0;
     innerWidthBinding = innerWidth;
-    maxLeft = innerWidthBinding - offsetWidthbinding + 0;
+    maxLeft = innerWidthBinding - offsetWidthbinding -40;
   }
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
@@ -180,11 +177,41 @@ window.addEventListener('load', event => {
   for (let i = 0; i <= 11; i++) {
     height = innerHeight - Math.random() * innerHeight;
     heightData.push(height);
-    leftDataList.push(dividedWidth * Math.random() * 10);
+    leftDataList.push(Math.floor(Math.random()*innerWidthBinding));
   }
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
+      if (value.textContent == '🎈') {
+        value.textContent = '💥';
+        scoreCount += 1
+        score.textContent = 'Score: ' + scoreCount;
+        if (scoreCount % 10 == 0) {
+          level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
+          if (innerWidthBinding < 460) {
+            upSpeed += 0.005;
+            sideSpeed += 0.0001;
+          } else {
+            upSpeed += 0.005;
+            sideSpeed += 0.0001;
+          }
+        }
+        let hide = setTimeout(() => {
+          value.style.display = 'none'
+        }, 200);
+      } else if (value.textContent == '💥') {
+        setTimeout(() => {
+          value.style.display = 'none'
+        }, 50);
+      } else {
+        cancelAnimationFrame(animation);
+        over.style.display = 'block';
+        gameReset();
+      }
+      event.preventDefault();
+    });
+    //For mobile devices
+    value.addEventListener('touchstart', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
         scoreCount += 1
@@ -246,5 +273,8 @@ toHome.addEventListener('click', event => {
 again.addEventListener('click', gameplay);
 game.addEventListener('touchmove', event => {
   event.preventDefault();
+})
+game.addEventListener('touchstart', event => {
+  event.preventDefault()
 })
 
