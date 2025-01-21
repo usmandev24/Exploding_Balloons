@@ -23,15 +23,19 @@ let level = document.getElementById('level');
 let cover = document.getElementById('cover');
 let again = document.getElementById('again');
 let over = document.getElementById('gameOver');
+let backbirddiv = document.getElementById('birddiv');
 let reset = 'not';
 let resetrun = 0;
 let round = 1;
 let scoreCount = 0
 let ballons = {};
+let backgroundbirds= {};
+let allBallonList;
+let allBirdsList
 let heightData = [];
+let birdHeightData = [];
 let animation;
 let angle = Math.PI;
-let allBallonList;
 let upSpeed = 0.1;
 let sideSpeed = 0.001;
 let innerWidthBinding = innerWidth;
@@ -136,7 +140,7 @@ function move(time, lasttime) {
     if (heightData[i] < -50) {
       let random = Math.random()
       if (allBallonList[i].textContent != '💥' || allBallonList[i].textContent != '🎈' ) {
-        heightData[i] = innerHeight + random * 100
+        heightData[i] = innerHeight + random * 150
       } else {
         heightData[i] = innerHeight
       }
@@ -169,20 +173,26 @@ function wait(time) {
 
 window.addEventListener('load', event => {
   let createbinding = 'ballons';
+  let birdbinding = 'backbird';
   for (let i = 1; i <= 11; i++) {
     ballons[createbinding + i] = document.createElement('div');
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
 
-    if (i == 6 || i == 9 || i == 3 || i == 1) {
+    if (i == 10 || i == 11 || i == 6 || i == 5) {
       let bird = document.createElement('img');
       bird.setAttribute('src', "images/bird.png");
       ballons[createbinding + i].appendChild(bird);
     } else {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
     }
-
     game.appendChild(ballons[createbinding + i]);
+
+    backgroundbirds[birdbinding + i] = document.createElement('div');
+    backgroundbirds[birdbinding + i].setAttribute('id', birdbinding + i);
+    backgroundbirds[birdbinding + i].className = 'backbirds';
+    backgroundbirds[birdbinding + i].appendChild(document.createTextNode('🕊️'));
+    backbirddiv.appendChild(backgroundbirds[birdbinding + [i]]);
   }
   allBallonList = Object.values(ballons);
   for (let i = 0; i <= 11; i++) {
@@ -254,6 +264,7 @@ window.addEventListener('load', event => {
   }
 });
 function gameReset() {
+  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   upSpeed = 0.1;
   sideSpeed = 0.001;
   scoreCount = 0;
@@ -267,7 +278,11 @@ function gameReset() {
   pauseResume.style.padding = '2px 1rem';
   cover.style.display = 'block';
   cover.style.zIndex = 9;
-  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
+  for (let i = 0; i <= 11; i++) {
+    height = innerHeight - Math.random() * innerHeight;
+    heightData[i] = height
+    leftDataList[i] = (Math.floor(Math.random()*innerWidthBinding));
+  }
 }
 window.addEventListener('mousedown', event => {
   event.preventDefault()
