@@ -29,22 +29,25 @@ let resetrun = 0;
 let round = 1;
 let scoreCount = 0
 let ballons = {};
-let backgroundbirds= {};
+let backgroundbirds = {};
 let allBallonList;
 let allBirdsList
 let heightData = [];
 let birdHeightData = [];
+let birdleftdata = [];
 let animation;
 let angle = Math.PI;
 let upSpeed = 0.1;
 let sideSpeed = 0.001;
 let innerWidthBinding = innerWidth;
+let innerHeightBinding = innerHeight
 let maxLeft;
 let left = 0;
 let leftDataList = [];
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
+let height;
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
@@ -67,16 +70,17 @@ toHome.addEventListener('click', event => {
 start.addEventListener('click', event => {
   event.stopPropagation();
   if (resetrun == 1) {
+    innerHeightBinding = innerHeight;
     for (let i = 0; i <= 11; i++) {
-      height = innerHeight - Math.random() * innerHeight;
+      height = innerHeightBinding - Math.random() * innerHeightBinding;
       heightData[i] = height
-      leftDataList[i] = (Math.floor(Math.random()*innerWidthBinding));
+      leftDataList[i] = (Math.floor(Math.random() * innerWidthBinding));
     }
   }
   reset = 'yes';
   resetrun = 1;
   gameplay(event);
-  
+
 });
 pauseResume.addEventListener('click', event => {
   event.stopPropagation();
@@ -114,7 +118,8 @@ function gameplay(event) {
   gameRunCount += 1;
   innerWidthBinding = innerWidth;
   offsetWidthbinding = allBallonList[0].offsetWidth;
-  maxLeft = innerWidthBinding - offsetWidthbinding - 40
+  maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+  backbirddiv.style.display = 'block';
   animation = requestAnimationFrame(move);
 }
 
@@ -126,6 +131,10 @@ function move(time, lasttime) {
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
+    birdHeightData[i] -= 0.4;
+    birdleftdata[i] += 0.01;
+    allBirdsList[i].style.top = birdHeightData[i] + 'px';
+    allBirdsList[i].style.left = birdleftdata[i] + 'px';
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -139,13 +148,12 @@ function move(time, lasttime) {
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -50) {
       let random = Math.random()
-      if (allBallonList[i].textContent != '💥' || allBallonList[i].textContent != '🎈' ) {
-        heightData[i] = innerHeight + random * 150
+      if (allBallonList[i].textContent != '💥' || allBallonList[i].textContent != '🎈') {
+        heightData[i] = innerHeightBinding + random * 150
       } else {
-        heightData[i] = innerHeight
+        heightData[i] = innerHeightBinding
       }
       leftDataList[i] = Math.floor(random * maxLeft)
-      console.log(offsetWidthbinding, maxLeft, leftDataList[i])
       if (allBallonList[i].textContent == '💥') {
         round += 1;
         allBallonList[i].textContent = '🎈';
@@ -157,11 +165,13 @@ function move(time, lasttime) {
   if (round > 300) {
     round = 0;
     innerWidthBinding = innerWidth;
-    maxLeft = innerWidthBinding - offsetWidthbinding -40;
+    innerHeightBinding = innerHeight;
+    maxLeft = innerWidthBinding - offsetWidthbinding - 40;
   };
   reset = 'not';
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
+
 
 function wait(time) {
   return new Promise((resolve, reject) => {
@@ -193,13 +203,41 @@ window.addEventListener('load', event => {
     backgroundbirds[birdbinding + i].className = 'backbirds';
     backgroundbirds[birdbinding + i].appendChild(document.createTextNode('🕊️'));
     backbirddiv.appendChild(backgroundbirds[birdbinding + [i]]);
-  }
+  };
+  allBirdsList = Object.values(backgroundbirds);
   allBallonList = Object.values(ballons);
+  let oneBirdHight = (innerHeightBinding / 10) * 8;
+  let oneBirdleft = (innerWidthBinding / 10)
   for (let i = 0; i <= 11; i++) {
-    height = innerHeight - Math.random() * innerHeight;
+    height = innerHeightBinding - Math.random() * innerHeightBinding;
     heightData.push(height);
-    leftDataList.push(Math.floor(Math.random()*innerWidthBinding));
+    leftDataList.push(Math.floor(Math.random() * innerWidthBinding));
+    if (i < 6) {
+      oneBirdleft += 20;
+      oneBirdHight -= 5;
+    } else {
+      oneBirdHight += 5
+      oneBirdleft +=23
+    }
+    birdHeightData.push(oneBirdHight);
+    
+    birdleftdata.push(oneBirdleft);
   }
+  setInterval(() => {
+    oneBirdHight = (innerHeightBinding + 20);
+    oneBirdleft = (innerWidthBinding / 10)
+    for (let i = 0; i <= 11; i++) {
+      if (i < 6) {
+        oneBirdleft += 20;
+        oneBirdHight -= 5;
+      } else {
+        oneBirdHight += 5
+        oneBirdleft +=23
+      }
+      birdHeightData[i] = (oneBirdHight);
+      birdleftdata[i] = (oneBirdleft);
+    }
+  }, 30000);
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
@@ -279,9 +317,8 @@ function gameReset() {
   cover.style.display = 'block';
   cover.style.zIndex = 9;
   for (let i = 0; i <= 11; i++) {
-    height = innerHeight - Math.random() * innerHeight;
-    heightData[i] = height
-    leftDataList[i] = (Math.floor(Math.random()*innerWidthBinding));
+    heightData[i] = innerHeightBinding - Math.random() * innerHeightBinding;
+    leftDataList[i] = (Math.floor(Math.random() * innerWidthBinding));
   }
 }
 window.addEventListener('mousedown', event => {
