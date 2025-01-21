@@ -164,15 +164,11 @@ window.addEventListener('load', event => {
     ballons[createbinding + i] = document.createElement('div');
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
-    if (i == 3) {
+    
+    if (i == 6 || i == 10 || i == 3) {
       let bird = document.createElement('img');
-
-      bird.setAttribute('src',"images/bird.png");
+      bird.setAttribute('src', "images/bird.png");
       ballons[createbinding + i].appendChild(bird);
-    } else if (i == 9 || i == 11) {
-      let baby = document.createElement('img');
-      baby.setAttribute('src', "images/baby.png");
-      ballons[createbinding + i].appendChild(baby);
     } else {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
     }
@@ -206,6 +202,10 @@ window.addEventListener('load', event => {
         let hide = setTimeout(() => {
           value.style.display = 'none'
         }, 200);
+      } else if(value.textContent == '💥') {
+          setTimeout(() => {
+            value.style.display = 'none'
+          }, 50);
       } else {
         cancelAnimationFrame(animation);
         over.style.display = 'block';
@@ -221,7 +221,7 @@ function gameReset() {
   scoreCount = 0;
   gameRunCount = 0;
   score.textContent = 'Score: ' + scoreCount;
-  level.textContent = 'Level: ' + Math.floor(scoreCount / 10)
+  level.textContent = 'Level: 1';
   pauseResume.style.background = 'white';
   pauseResume.style.color = 'blue';
   pauseResume.style.fontSize = '1.3rem';
