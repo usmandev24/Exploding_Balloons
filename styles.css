@@ -166,16 +166,30 @@ a {
   cursor: pointer;
 }
 #homepage {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 80%;
+  height: 80%;
   margin: auto;
-  padding: 0 1rem;
+  margin-top: 1rem;
+  padding: .5 1rem;
   padding-bottom: 1rem;
   border-radius: 10px;
-  background-color: rgb(235, 235, 248);
+  background-color: #ffffff;
+}
+#homepage>h1 {
+  padding: 1rem;
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 10px;
+}
+#note {
+  background-color: #f0f0f0;
+  padding: .1 0 1rem 0;
+  border-radius: 10px;
 }
 body {
-  background-color: #b3b3b3;
   background-image: url(images/homeBackground.jpeg);
+  background-size:cover;
 }
 #gameOver {
   display: none;
@@ -213,6 +227,7 @@ button:active {
   background-color: #fff3db;
   padding: 5px;
   
+  
 }
 #gameOver>h3 {
   border-bottom: 1px solid darkred;
@@ -244,9 +259,23 @@ button:active {
     padding: .5rem 0;
     width: 20rem;
   }
-  #homepage {
+  #gameOver>h2 {
+    width: 18rem;
+  margin-left: auto;
+  margin-right: auto;
+  }
+  #homepage{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 90%;
+    height: 88%;
   } 
+  #homepage>h1 {
+    padding-top: .4rem;
+    font-size: 1.6rem;
+    background-color: #faf8f6;
+    border-radius: 10px;
+    margin-top: .5rem;
+  }
   #game {
     background-image: url(images/mbackground.jpeg);
   }
