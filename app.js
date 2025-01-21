@@ -132,8 +132,9 @@ function move(time, lasttime) {
   }
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -100) {
-      heightData[i] = innerHeight;
-      leftDataList[i] = innerWidthBinding / 12 * Math.random() * 10;
+      let random = Math.random()
+      heightData[i] = innerHeight + random*100
+      leftDataList[i] = innerWidthBinding / 12 * random * 10;
       if (allBallonList[i].textContent == '💥') {
         round += 1;
         allBallonList[i].textContent = '🎈';
@@ -165,7 +166,7 @@ window.addEventListener('load', event => {
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
     
-    if (i == 6 || i == 10 || i == 3) {
+    if (i == 6 || i == 9 || i == 3 || i== 1) {
       let bird = document.createElement('img');
       bird.setAttribute('src', "images/bird.png");
       ballons[createbinding + i].appendChild(bird);
@@ -183,7 +184,6 @@ window.addEventListener('load', event => {
   }
   over.style.left = (innerWidthBinding - over.offsetWidth)/2
   for (let value of allBallonList) {
-
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
