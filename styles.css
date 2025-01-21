@@ -245,7 +245,7 @@ button:active {
     width: 20rem;
   }
   #homepage {
-    margin: .3rem;
+    width: 90%;
   } 
   #game {
     background-image: url(images/mbackground.jpeg);
