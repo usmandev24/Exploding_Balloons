@@ -23,6 +23,8 @@ let level = document.getElementById('level');
 let cover = document.getElementById('cover');
 let again = document.getElementById('again');
 let over = document.getElementById('gameOver');
+let reset = 'not';
+let resetrun = 0;
 let round = 1;
 let scoreCount = 0
 let ballons = {};
@@ -39,8 +41,6 @@ let leftDataList = [];
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
-// tells us how much elements ballons or bird can be placed in a line with given innerheight
-let elementsNum ;
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
@@ -61,15 +61,25 @@ toHome.addEventListener('click', event => {
 })
 //-----------------------Game Events------------------
 start.addEventListener('click', event => {
-  event.stopPropagation()
-  gameplay(event)
+  event.stopPropagation();
+  if (resetrun == 1) {
+    for (let i = 0; i <= 11; i++) {
+      height = innerHeight - Math.random() * innerHeight;
+      heightData[i] = height
+      leftDataList[i] = (Math.floor(Math.random()*innerWidthBinding));
+    }
+  }
+  reset = 'yes';
+  resetrun = 1;
+  gameplay(event);
+  
 });
 pauseResume.addEventListener('click', event => {
   event.stopPropagation();
   if (gameRunCount == 0) {
-    gameplay(event)
+    reset = 'not';
+    gameplay(event);
     cover.style.display = 'none';
-
   } else if (gameRunCount == 1) {
     gameRunCount = 0
     cancelAnimationFrame(animation);
@@ -112,7 +122,7 @@ function move(time, lasttime) {
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    if (lasttime != null) {
+    if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
     if (leftDataList[i] > maxLeft) {
@@ -144,7 +154,8 @@ function move(time, lasttime) {
     round = 0;
     innerWidthBinding = innerWidth;
     maxLeft = innerWidthBinding - offsetWidthbinding -40;
-  }
+  };
+  reset = 'not';
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
 

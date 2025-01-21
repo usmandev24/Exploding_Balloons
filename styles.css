@@ -188,7 +188,7 @@ a {
   border-radius: 10px;
 }
 body {
-  background-image: url(images/homeBackground.jpeg);
+  background-image: url(images/deskBackground.jpeg);
   background-size:cover;
 }
 #gameOver {
