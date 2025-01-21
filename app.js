@@ -127,9 +127,13 @@ function move(time, lasttime) {
     i += 1;
   }
   for (let i = 0; i < heightData.length; i++) {
-    if (heightData[i] < -100) {
+    if (heightData[i] < -50) {
       let random = Math.random()
-      heightData[i] = innerHeight + random * 100
+      if (allBallonList[i].textContent != '💥' || allBallonList[i].textContent != '🎈' ) {
+        heightData[i] = innerHeight + random * 100
+      } else {
+        heightData[i] = innerHeight
+      }
       leftDataList[i] = innerWidthBinding / 12 * random * 10;
       if (allBallonList[i].textContent == '💥') {
         round += 1;
