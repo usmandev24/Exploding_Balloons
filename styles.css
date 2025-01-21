@@ -188,7 +188,7 @@ a {
   border-radius: 10px;
 }
 body {
-  background-image: url(images/deskBackground.jpeg);
+  background-image: url(images/bodyback.jpeg);
   background-size:cover;
 }
 #gameOver {
@@ -233,6 +233,9 @@ button:active {
   border-bottom: 1px solid darkred;
   padding-bottom: .5rem;
   color: #e4e4e4;
+}
+#birddiv {
+  display: none;
 }
 @media only screen and (max-width : 480px) {
   nav>ul>li {
