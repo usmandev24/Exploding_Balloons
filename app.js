@@ -40,14 +40,15 @@ let dividedWidth = innerWidthBinding / 12
 let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
-over.style.left = (innerWidthBinding - over.offsetWidth)/2
+let multiplyer;
+over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
   gameRunCount = 0
   cancelAnimationFrame(animation);
   game.style.display = 'none';
   homepage.style.display = 'block';
-  
+
   pauseResume.style.color = 'blue';
   pauseResume.style.fontSize = '1.3rem';
   if (pauseResume.textContent != 'Play') {
@@ -102,13 +103,8 @@ function gameplay(event) {
   innerWidthBinding = innerWidth;
   dividedWidth = innerWidthBinding / 12;
   offsetWidthbinding = allBallonList[0].offsetWidth;
-  if (innerWidthBinding < 460) {
-    maxLeft = innerWidthBinding - offsetWidthbinding + 10;
-  }
-  else {
-    maxLeft = innerWidthBinding - offsetWidthbinding;
-  }
-
+  maxLeft = innerWidthBinding - offsetWidthbinding;
+  
   animation = requestAnimationFrame(move);
 }
 
@@ -124,7 +120,7 @@ function move(time, lasttime) {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
     if (leftDataList[i] > maxLeft) {
-      leftDataList[i] = maxLeft / (1 + Math.random() * 10)
+      leftDataList[i] = maxLeft / ( 1 + Math.random() * 10)
     }
     ballon.style.top = heightData[i] + 'px';
     ballon.style.left = leftDataList[i] + changeLeft + 'px';
@@ -133,7 +129,7 @@ function move(time, lasttime) {
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -100) {
       let random = Math.random()
-      heightData[i] = innerHeight + random*100
+      heightData[i] = innerHeight + random * 100
       leftDataList[i] = innerWidthBinding / 12 * random * 10;
       if (allBallonList[i].textContent == '💥') {
         round += 1;
@@ -143,10 +139,10 @@ function move(time, lasttime) {
     }
   }
   round += 1;
-  if (round > 300) {
+  if (round > 500) {
     round = 0;
     innerWidthBinding = innerWidth;
-    maxLeft = innerWidthBinding - offsetWidthbinding;
+    maxLeft = innerWidthBinding - offsetWidthbinding + 0;
   }
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
@@ -165,8 +161,8 @@ window.addEventListener('load', event => {
     ballons[createbinding + i] = document.createElement('div');
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal'
-    
-    if (i == 6 || i == 9 || i == 3 || i== 1) {
+
+    if (i == 6 || i == 9 || i == 3 || i == 1) {
       let bird = document.createElement('img');
       bird.setAttribute('src', "images/bird.png");
       ballons[createbinding + i].appendChild(bird);
@@ -182,7 +178,7 @@ window.addEventListener('load', event => {
     heightData.push(height);
     leftDataList.push(dividedWidth * Math.random() * 10);
   }
-  over.style.left = (innerWidthBinding - over.offsetWidth)/2
+  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
@@ -202,10 +198,10 @@ window.addEventListener('load', event => {
         let hide = setTimeout(() => {
           value.style.display = 'none'
         }, 200);
-      } else if(value.textContent == '💥') {
-          setTimeout(() => {
-            value.style.display = 'none'
-          }, 50);
+      } else if (value.textContent == '💥') {
+        setTimeout(() => {
+          value.style.display = 'none'
+        }, 50);
       } else {
         cancelAnimationFrame(animation);
         over.style.display = 'block';
@@ -229,7 +225,7 @@ function gameReset() {
   pauseResume.style.padding = '2px 1rem';
   cover.style.display = 'block';
   cover.style.zIndex = 9;
-  over.style.left = (innerWidthBinding - over.offsetWidth)/2
+  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 }
 window.addEventListener('mousedown', event => {
   event.preventDefault()
@@ -243,4 +239,8 @@ toHome.addEventListener('click', event => {
     items.style.display = 'none';
   }, 100);
 })
-again.addEventListener('click', gameplay)
+again.addEventListener('click', gameplay);
+game.addEventListener('touchmove', event => {
+  event.preventDefault();
+})
+
