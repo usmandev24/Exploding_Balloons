@@ -236,6 +236,14 @@ button:active {
   padding-bottom: .5rem;
   color: #e4e4e4;
 }
+#tscore {
+  background-color: #b6ffc2;
+  width: 10rem;
+  margin: auto;
+  margin-bottom: 1rem;
+  padding: 3px;
+  border-radius: 5px;
+}
 #birddiv {
   display: none;
 }
