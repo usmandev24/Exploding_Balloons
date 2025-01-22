@@ -136,7 +136,7 @@ h1 {
   font-size: 6rem;
   display: inline;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   box-sizing:border-box;
   width: min-content;
   
@@ -151,7 +151,7 @@ h1 {
   background-color: beige;
   width: 100vw;
   overflow: hidden;
-  background-image: url(images/deskBackground.jpeg);
+  background-image: url(images/deskBackground.png);
   background-repeat: repeat;
   background-size: cover;
   margin-left: -8px;
@@ -190,7 +190,7 @@ a {
   border-radius: 10px;
 }
 body {
-  background-image: url(images/bodyback.jpeg);
+  background-image: url(images/deskBackground.png);
   background-size:cover;
 }
 #gameOver {
@@ -241,7 +241,7 @@ button:active {
 }
 .backbirds {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   font-size: 1rem;
   display: inline;
 }
@@ -255,6 +255,19 @@ button:active {
   background: radial-gradient(circle, rgb(255, 217, 0), rgb(255, 165, 0)); /* Yellow to orange */
   border-radius: 50%;
   box-shadow: 0 0 20px 10px rgba(255, 223, 0, 0.6);
+}
+#dclouds {
+  width:max-content;
+  height: auto;
+  max-height: 65%;
+  overflow: hidden;
+  position: absolute;
+  top: 40px;
+  left: 0px;
+  z-index: 1;
+}
+#mclouds {
+  display: none;
 }
 @media only screen and (max-width : 480px) {
   nav>ul>li {
@@ -299,6 +312,19 @@ button:active {
     margin-top: .5rem;
   }
   #game {
-    background-image: url(images/mbackground.jpeg);
+    background-image: url(images/mbackground.png);
+  }
+  #dclouds {
+    display: none;
+  }
+  #mclouds {
+    display: inline;
+    width: 100vw;
+    height: auto;
+    max-height: 80%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 }
