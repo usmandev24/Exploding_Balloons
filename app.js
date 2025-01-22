@@ -57,17 +57,17 @@ let sunData = {
   backgroundcolor: [[255, 217, 0], [255, 165, 0]],
   shadow: [255, 217, 0, 0.6],
   background: 'radial-gradient(circle, rgb(255, 217, 0), rgb(255, 165, 0))',
-  boxShadow: '0 0 20px 10px rgba(255, 223, 0, 0.6)'
+  boxShadow: '4px 4px 60px 30px rgba(255, 223, 0, 0.8)'
 };
 let sundatachage = {
   topChange: innerHeightBinding * 0.8 / 60000,
   leftChange: innerWidthBinding * 0.4 / 60000,
   BlueChange: 255 / 5000,
-  Green1Change: 38 / 5000,
-  green2Change: 90 / 5000,
-  sGreenChange: 32 / 5000,
-  widthChange: 50 / 10000,
-  heightChage: 50 / 10000,
+  Green1Change: 38 / 3000,
+  green2Change: 90 / 3000,
+  sGreenChange: 32 / 3000,
+  widthChange: 50 / 8000,
+  heightChage: 50 / 8000,
 }
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
@@ -201,7 +201,7 @@ function move(time, lasttime) {
 
     sun.style.top = sunData.top + 'px';
     sun.style.left = sunData.left + 'px';
-    if (sunData.width > 60) {
+    if (sunData.width > 49) {
       sun.style.width = sunData.width + 'px';
       sun.style.height = sunData.height + 'px';
     }
