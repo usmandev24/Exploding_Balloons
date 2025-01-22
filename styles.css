@@ -167,6 +167,7 @@ a {
 }
 #homepage {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  position: relative;
   width: 80%;
   height: 80%;
   margin: auto;
@@ -175,6 +176,7 @@ a {
   padding-bottom: 1rem;
   border-radius: 10px;
   background-color: #ffffff;
+  z-index: 5;
 }
 #homepage>h1 {
   padding: 1rem;
@@ -239,8 +241,20 @@ button:active {
 }
 .backbirds {
   position: absolute;
+  z-index: 1;
   font-size: 1rem;
   display: inline;
+}
+.sun {
+  position: absolute;
+  top: 65%;
+  left: 10%;
+  z-index: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgb(255, 217, 0), rgb(255, 165, 0)); /* Yellow to orange */
+  border-radius: 50%;
+  box-shadow: 0 0 20px 10px rgba(255, 223, 0, 0.6);
 }
 @media only screen and (max-width : 480px) {
   nav>ul>li {
