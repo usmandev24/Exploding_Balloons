@@ -60,14 +60,14 @@ let sunData = {
   boxShadow: '0 0 20px 10px rgba(255, 223, 0, 0.6)'
 };
 let sundatachage = {
-  topChange: innerHeightBinding * 0.8 / 300000,
-  leftChange: innerWidthBinding * 0.4 / 300000,
-  BlueChange: 255 / 30000,
-  Green1Change: 38 / 30000,
-  green2Change: 90 / 30000,
-  sGreenChange: 32 / 30000,
-  widthChange: 40 / 90000,
-  heightChage: 40 / 90000,
+  topChange: innerHeightBinding * 0.8 / 60000,
+  leftChange: innerWidthBinding * 0.4 / 60000,
+  BlueChange: 255 / 5000,
+  Green1Change: 38 / 5000,
+  green2Change: 90 / 5000,
+  sGreenChange: 32 / 5000,
+  widthChange: 50 / 10000,
+  heightChage: 50 / 10000,
 }
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
@@ -161,29 +161,6 @@ function move(time, lasttime) {
       allBirdsList[i].style.top = birdHeightData[i] + 'px';
       allBirdsList[i].style.left = birdleftdata[i] + 'px';
     }
-    if (sunData.top > -50) {
-      sunData.top -= sundatachage.topChange;
-      sunData.left += sundatachage.leftChange;
-      sunData.width -= sundatachage.widthChange;
-      sunData.height -= sundatachage.heightChage;
-      sunData.shadow[1] += sundatachage.sGreenChange;
-      sunData.shadow[2] += sundatachage.BlueChange;
-      sunData.backgroundcolor[1][1] += sundatachage.green2Change;
-      green1s = sunData.shadow[1];
-      green2 = sunData.backgroundcolor[1][1];
-      blue = sunData.shadow[2];
-
-      sun.style.top = sunData.top + 'px';
-      sun.style.left = sunData.left + 'px';
-      if (sunData.width > 60) {
-        sun.style.width = sunData.width + 'px';
-        sun.style.height = sunData.height + 'px';
-      }
-      if (green1s <= 250 && blue <= 250) {
-        sun.style.background = `radial-gradient(circle, rgb(255,${green1s} ,${blue}), rgb(255, ${green2}, ${blue}))`;
-        sun.style.boxShadow = `0 0 20px 10px rgba(250, ${green1s}, ${blue}, 0.6)`;
-      }
-    }
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -208,6 +185,29 @@ function move(time, lasttime) {
         allBallonList[i].textContent = '🎈';
         allBallonList[i].style.display = 'inline'
       }
+    }
+  }
+  if (sunData.top > -50) {
+    sunData.top -= sundatachage.topChange;
+    sunData.left += sundatachage.leftChange;
+    sunData.width -= sundatachage.widthChange;
+    sunData.height -= sundatachage.heightChage;
+    sunData.shadow[1] += sundatachage.sGreenChange;
+    sunData.shadow[2] += sundatachage.BlueChange;
+    sunData.backgroundcolor[1][1] += sundatachage.green2Change;
+    green1s = sunData.shadow[1];
+    green2 = sunData.backgroundcolor[1][1];
+    blue = sunData.shadow[2];
+
+    sun.style.top = sunData.top + 'px';
+    sun.style.left = sunData.left + 'px';
+    if (sunData.width > 60) {
+      sun.style.width = sunData.width + 'px';
+      sun.style.height = sunData.height + 'px';
+    }
+    if (green1s <= 250 && blue <= 250) {
+      sun.style.background = `radial-gradient(circle, rgb(255,${green1s} ,${blue}), rgb(255, ${green2}, ${blue}))`;
+      sun.style.boxShadow = `0 0 20px 10px rgba(250, ${green1s}, ${blue}, 0.6)`;
     }
   }
   round += 1;
