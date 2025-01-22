@@ -24,6 +24,7 @@ let cover = document.getElementById('cover');
 let again = document.getElementById('again');
 let over = document.getElementById('gameOver');
 let backbirddiv = document.getElementById('birddiv');
+let sun = document.getElementById('sun');
 let reset = 'not';
 let resetrun = 0;
 let round = 1;
@@ -48,6 +49,26 @@ let gameRunCount = 0;
 let changeLeft;
 let offsetWidthbinding;
 let height;
+let sunData = {
+  width: 100,
+  height: 100,
+  top: innerHeightBinding * 0.65,
+  left: innerWidthBinding * 0.1,
+  backgroundcolor: [[255, 217, 0], [255, 165, 0]],
+  shadow: [255, 217, 0, 0.6],
+  background: 'radial-gradient(circle, rgb(255, 217, 0), rgb(255, 165, 0))',
+  boxShadow: '0 0 20px 10px rgba(255, 223, 0, 0.6)'
+};
+let sundatachage = {
+  topChange: innerHeightBinding * 0.8 / 300000,
+  leftChange: innerWidthBinding * 0.4 / 300000,
+  BlueChange: 255 / 30000,
+  Green1Change: 38 / 30000,
+  green2Change: 90 / 30000,
+  sGreenChange: 32 / 30000,
+  widthChange: 40 / 90000,
+  heightChage: 40 / 90000,
+}
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2
 toHome.addEventListener('click', event => {
   event.stopPropagation();
@@ -126,15 +147,43 @@ function gameplay(event) {
 function move(time, lasttime) {
   let i = 0;
   changeLeft = 0;
+  let green1s;
+  let green2;
+  let blue;
   if (lasttime != null && innerWidthBinding > 460) {
     angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    birdHeightData[i] -= 0.4;
-    birdleftdata[i] += 0.01;
-    allBirdsList[i].style.top = birdHeightData[i] + 'px';
-    allBirdsList[i].style.left = birdleftdata[i] + 'px';
+    if (birdHeightData[i] > -10) {
+      birdHeightData[i] -= 0.4;
+      birdleftdata[i] += 0.01;
+      allBirdsList[i].style.top = birdHeightData[i] + 'px';
+      allBirdsList[i].style.left = birdleftdata[i] + 'px';
+    }
+    if (sunData.top > -50) {
+      sunData.top -= sundatachage.topChange;
+      sunData.left += sundatachage.leftChange;
+      sunData.width -= sundatachage.widthChange;
+      sunData.height -= sundatachage.heightChage;
+      sunData.shadow[1] += sundatachage.sGreenChange;
+      sunData.shadow[2] += sundatachage.BlueChange;
+      sunData.backgroundcolor[1][1] += sundatachage.green2Change;
+      green1s = sunData.shadow[1];
+      green2 = sunData.backgroundcolor[1][1];
+      blue = sunData.shadow[2];
+
+      sun.style.top = sunData.top + 'px';
+      sun.style.left = sunData.left + 'px';
+      if (sunData.width > 60) {
+        sun.style.width = sunData.width + 'px';
+        sun.style.height = sunData.height + 'px';
+      }
+      if (green1s <= 250 && blue <= 250) {
+        sun.style.background = `radial-gradient(circle, rgb(255,${green1s} ,${blue}), rgb(255, ${green2}, ${blue}))`;
+        sun.style.boxShadow = `0 0 20px 10px rgba(250, ${green1s}, ${blue}, 0.6)`;
+      }
+    }
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -217,10 +266,10 @@ window.addEventListener('load', event => {
       oneBirdHight -= 5;
     } else {
       oneBirdHight += 5
-      oneBirdleft +=23
+      oneBirdleft += 23
     }
     birdHeightData.push(oneBirdHight);
-    
+
     birdleftdata.push(oneBirdleft);
   }
   setInterval(() => {
@@ -232,12 +281,12 @@ window.addEventListener('load', event => {
         oneBirdHight -= 5;
       } else {
         oneBirdHight += 5
-        oneBirdleft +=23
+        oneBirdleft += 23
       }
       birdHeightData[i] = (oneBirdHight);
       birdleftdata[i] = (oneBirdleft);
     }
-  }, 30000);
+  }, 150000);
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {

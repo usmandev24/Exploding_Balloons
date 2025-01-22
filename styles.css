@@ -245,7 +245,7 @@ button:active {
   font-size: 1rem;
   display: inline;
 }
-.sun {
+#sun {
   position: absolute;
   top: 65%;
   left: 10%;
