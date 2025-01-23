@@ -64,14 +64,14 @@ let sunData = {
   boxShadow: '0px 0px 50px 20px rgba(255, 223, 0, 0.8)'
 };
 let sundatachage = {
-  topChange: innerHeightBinding * 0.8 / 20000,
-  leftChange: innerWidthBinding * 0.7 / 20000,
-  BlueChange: 255 / 2000,
-  Green1Change: 38 / 2000,
-  green2Change: 90 / 2000,
-  sGreenChange: 32 / 2000,
-  widthChange: 45 / 4000,
-  heightChage: 45 / 4000,
+  topChange: innerHeightBinding * 0.8 / 15000,
+  leftChange: innerWidthBinding * 0.7 / 15000,
+  BlueChange: 240 / 1500,
+  Green1Change: 38 / 1500,
+  green2Change: 90 / 1500,
+  sGreenChange: 32 / 1500,
+  widthChange: 45 / 3000,
+  heightChage: 45 / 3000,
 }
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2 // For game over popup.
 toHome.addEventListener('click', event => {
@@ -144,7 +144,7 @@ function gameplay(event) {
   innerWidthBinding = innerWidth;
   offsetWidthbinding = allBallonList[0].offsetWidth;
   maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-  if (innerWidthBinding > 460) {
+  if (innerWidthBinding > 46) {
     backbirddiv.style.display = 'block';
   } else {
     clearInterval(birdresetInterval)
@@ -160,7 +160,7 @@ function move(time, lasttime) {
   let green1s;
   let green2;
   let blue;
-  if (innerWidthBinding > 460) {         // This is for backgorund Birds
+  if (innerWidthBinding > 46) {         // This is for backgorund Birds
     for (let bird of allBirdsList) {
       if (birdHeightData[bi] > -50) {
         birdHeightData[bi] -= 0.2;
@@ -177,6 +177,28 @@ function move(time, lasttime) {
         }
       }
       bi+=1;
+    }
+  }
+  if (sunData.top > -50) {
+    sunData.top -= sundatachage.topChange;
+    sunData.left += sundatachage.leftChange;
+    sunData.width -= sundatachage.widthChange;
+    sunData.height -= sundatachage.heightChage;
+    sunData.shadow[1] += sundatachage.sGreenChange;
+    sunData.shadow[2] += sundatachage.BlueChange;
+    sunData.backgroundcolor[1][1] += sundatachage.green2Change;
+    green1s = sunData.shadow[1];
+    green2 = sunData.backgroundcolor[1][1];
+    blue = sunData.shadow[2];
+    sun.style.top = sunData.top + 'px';
+    sun.style.left = sunData.left + 'px';
+    if (sunData.width > 55) {
+      sun.style.width = sunData.width + 'px';
+      sun.style.height = sunData.height + 'px';
+    }
+    if (green1s <= 255 && blue <= 240) {
+      sun.style.background = `radial-gradient(circle, rgb(255,${green1s} ,${blue}), rgb(255, ${green2}, ${blue}))`;
+      sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
   // This for ballons positions
@@ -210,28 +232,6 @@ function move(time, lasttime) {
         allBallonList[i].textContent = '🎈';
         allBallonList[i].style.display = 'inline'
       }
-    }
-  }
-  if (sunData.top > -50) {
-    sunData.top -= sundatachage.topChange;
-    sunData.left += sundatachage.leftChange;
-    sunData.width -= sundatachage.widthChange;
-    sunData.height -= sundatachage.heightChage;
-    sunData.shadow[1] += sundatachage.sGreenChange;
-    sunData.shadow[2] += sundatachage.BlueChange;
-    sunData.backgroundcolor[1][1] += sundatachage.green2Change;
-    green1s = sunData.shadow[1];
-    green2 = sunData.backgroundcolor[1][1];
-    blue = sunData.shadow[2];
-    sun.style.top = sunData.top + 'px';
-    sun.style.left = sunData.left + 'px';
-    if (sunData.width > 55) {
-      sun.style.width = sunData.width + 'px';
-      sun.style.height = sunData.height + 'px';
-    }
-    if (green1s <= 255 && blue <= 255) {
-      sun.style.background = `radial-gradient(circle, rgb(255,${green1s} ,${blue}), rgb(255, ${green2}, ${blue}))`;
-      sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
   round += 1;  // THis is for resposiveness on desktop when window size changes
