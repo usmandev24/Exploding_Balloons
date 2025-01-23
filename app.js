@@ -28,7 +28,7 @@ let sun = document.getElementById('sun');
 let totalScore = document.getElementById('tscore');
 let reset = 'not';
 let resetrun = 0;       //For reseting position of ballons 
-let round = 1;            //This is for how many times request frame is called;
+let round = 1;            //This is for how many times request frame  is called for function move; 
 let scoreCount = 0
 let ballons = {};
 let backgroundbirds = {};
@@ -43,6 +43,11 @@ let leftDataList = [];      //Each ballon left position in px.
 let birdHeightData = [];
 let birdleftdata = [];
 let animation;
+let falled;                 //Bird which falled
+let fanimation;             // Falled bird animation;
+let topf;                  //Falled bird top position binding;
+let cancelFani;          //Settimeout for canceling fanimation;
+let gameOut = false;
 let angle = Math.PI;
 let upSpeed = 0.1;          //for ballon
 let sideSpeed = 0.001;      //for ballon
@@ -73,7 +78,6 @@ let sundatachage = {
   widthChange: 45 / 3000,
   heightChage: 45 / 3000,
 }
-over.style.left = (innerWidthBinding - over.offsetWidth) / 2 // For game over popup.
 toHome.addEventListener('click', event => {
   event.stopPropagation();
   gameRunCount = 0
@@ -129,6 +133,12 @@ pauseResume.addEventListener('click', event => {
 
 //--------------Game Fucntions---------
 function gameplay(event) {
+  if (gameOut) {
+    cancelAnimationFrame(fanimation);
+    clearTimeout(cancelFani);
+    falled.style.transform = 'rotate(360deg)';
+    gameOut = false
+  }
   event.preventDefault()
   cover.style.display = 'none'
   over.style.display = 'none';
@@ -149,7 +159,6 @@ function gameplay(event) {
   } else {
     clearInterval(birdresetInterval)
   }
-
   animation = requestAnimationFrame(move);
 }
 
@@ -160,25 +169,6 @@ function move(time, lasttime) {
   let green1s;
   let green2;
   let blue;
-  if (innerWidthBinding > 46) {         // This is for backgorund Birds
-    for (let bird of allBirdsList) {
-      if (birdHeightData[bi] > -50) {
-        birdHeightData[bi] -= 0.2;
-        birdleftdata[bi] += 0.02;
-        bird.style.top = birdHeightData[bi] + 'px';
-        bird.style.left = birdleftdata[bi] + 'px';
-        if (birdshow[bi] < 1) {
-          birdshow[bi] += birdsizechange
-          bird.style.transform = `scale(${birdshow[bi]})`
-        }
-        else if (birdhide[bi] > 0) {
-          birdhide[bi] -= birdsizechange;
-          bird.style.transform = `scale(${birdhide[bi]})`;
-        }
-      }
-      bi+=1;
-    }
-  }
   if (sunData.top > -50) {
     sunData.top -= sundatachage.topChange;
     sunData.left += sundatachage.leftChange;
@@ -207,6 +197,20 @@ function move(time, lasttime) {
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
+    if (birdHeightData[i] > -50) {
+      birdHeightData[i] -= 0.2;
+      birdleftdata[i] += 0.02;
+      allBirdsList[i].style.top = birdHeightData[i] + 'px';
+      allBirdsList[i].style.left = birdleftdata[i] + 'px';
+      if (birdshow[i] < 1) {
+        birdshow[i] += birdsizechange
+        allBirdsList[i].style.transform = `scale(${birdshow[i]})`
+      }
+      else if (birdhide[i] > 0) {
+        birdhide[i] -= birdsizechange;
+        allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
+      }
+    }
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -247,7 +251,6 @@ function move(time, lasttime) {
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
 
-
 function wait(time) {
   return new Promise((resolve, reject) => {
     let waiting = setTimeout(() => {
@@ -272,7 +275,6 @@ window.addEventListener('load', event => {
       ballons[createbinding + i].appendChild(document.createTextNode('🎈'))
     }
     game.appendChild(ballons[createbinding + i]);
-
     backgroundbirds[birdbinding + i] = document.createElement('div');
     backgroundbirds[birdbinding + i].setAttribute('id', birdbinding + i);
     backgroundbirds[birdbinding + i].className = 'backbirds';
@@ -301,7 +303,7 @@ window.addEventListener('load', event => {
   }
 
   // This intervel is for ressetting background birds positions
-  if (innerWidthBinding > 460) {
+  if (innerWidthBinding > 46) {
     birdresetInterval = setInterval(() => {
       birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
       birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -320,8 +322,6 @@ window.addEventListener('load', event => {
       }
     }, 90000);
   }
-
-  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
@@ -347,8 +347,14 @@ window.addEventListener('load', event => {
         }, 50);
       } else {
         cancelAnimationFrame(animation);
-        over.style.display = 'block';
+        value.style.transform = 'rotate(180deg)';
         gameReset();
+        gameOut = true;
+        falled = value;
+        cancelFani = setTimeout(() => {
+          cancelAnimationFrame(fanimation);
+        }, 7000);
+        fanimation = requestAnimationFrame(newtime =>fall(value, newtime, null));
       }
       event.preventDefault();
     });
@@ -377,17 +383,31 @@ window.addEventListener('load', event => {
         }, 50);
       } else {
         cancelAnimationFrame(animation);
-        over.style.display = 'block';
+        value.style.transform = 'rotate(180deg)';
         gameReset();
-      }
+        gameOut = true;
+        falled = value;
+        cancelFani = setTimeout(() => {
+          cancelAnimationFrame(fanimation);
+        }, 8000);
+        fanimation = requestAnimationFrame(newtime =>fall(value, newtime, null));
+      } 
       event.preventDefault();
     });
   }
 });
 // ---------------------------End of initial prepareation----------------------------
+function fall(value,time, lasttime) {
+  topf = value.style.top
+  topf = Number(topf.replace(/px/ig, ''))
+  if (lasttime != null) {
+    topf += (time - lasttime) * upSpeed;
+  }
+  value.style.top = topf + 'px';
+  fanimation = requestAnimationFrame(newtime => fall(value,newtime, time))
+}
 function gameReset() {
   totalScore.textContent = "Your Score : " + scoreCount;
-  over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   upSpeed = 0.1;
   sideSpeed = 0.001;
   scoreCount = 0;
@@ -405,6 +425,10 @@ function gameReset() {
     heightData[i] = innerHeightBinding - Math.random() * innerHeightBinding;
     leftDataList[i] = (Math.floor(Math.random() * innerWidthBinding));
   }
+  setTimeout(() => {
+    over.style.display = 'block';
+    over.style.left = (innerWidth - over.offsetWidth) / 2;
+  }, 200);
 }
 //----------------Defuault behavior of mouse clicks and touches remmoved form here----------------------
 window.addEventListener('mousedown', event => {
