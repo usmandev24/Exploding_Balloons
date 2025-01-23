@@ -29,7 +29,6 @@ let totalScore = document.getElementById('tscore');
 let reset = 'not';
 let resetrun = 0;       //For reseting position of ballons 
 let round = 1;            //This is for how many times request frame  is called for function move; 
-let round2 = 1;           //This is similar as before was given;
 let scoreCount = 0
 let ballons = {};
 let backgroundbirds = {};
@@ -162,8 +161,27 @@ function gameplay(event) {
 }
 
 function move(time, lasttime) {
-  round2 += 1;
   let i = 0;
+  if (innerWidthBinding > 460) {
+    for (let bird of allBirdsList) {
+      if (birdHeightData[i] > -50) {
+        birdHeightData[i] -= 0.2;
+        birdleftdata[i] += 0.02;
+        allBirdsList[i].style.top = birdHeightData[i] + 'px';
+        allBirdsList[i].style.left = birdleftdata[i] + 'px';
+        if (birdshow[i] < 1) {
+          birdshow[i] += birdsizechange
+          allBirdsList[i].style.transform = `scale(${birdshow[i]})`
+        }
+        else if (birdhide[i] > 0) {
+          birdhide[i] -= birdsizechange;
+          allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
+        }
+      }
+      i+=1;
+    }
+  }
+  i= 0;
   changeLeft = 0;
   let green1s;
   let green2;
@@ -190,31 +208,12 @@ function move(time, lasttime) {
       sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
-  if (round2 == 12000) {
-    backbirddiv.style.display = 'block';
-  }
   // This for ballons positions
   if (innerWidthBinding > 460 && lasttime != null) {
     angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    if (innerWidthBinding > 460 || round2 > 12000) {
-      if (birdHeightData[i] > -50) {
-        birdHeightData[i] -= 0.2;
-        birdleftdata[i] += 0.02;
-        allBirdsList[i].style.top = birdHeightData[i] + 'px';
-        allBirdsList[i].style.left = birdleftdata[i] + 'px';
-        if (birdshow[i] < 1) {
-          birdshow[i] += birdsizechange
-          allBirdsList[i].style.transform = `scale(${birdshow[i]})`
-        }
-        else if (birdhide[i] > 0) {
-          birdhide[i] -= birdsizechange;
-          allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
-        }
-      }
-    }
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -323,28 +322,6 @@ window.addEventListener('load', event => {
         birdleftdata[i] = (oneBirdleft);
       }
     }, 90000);
-  } else {
-    setTimeout(() => {
-      birdresetInterval = setInterval(() => {
-        birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
-        birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-        if (innerWidthBinding < 460) {
-          oneBirdHight = (innerHeightBinding / 10) * 8;
-          oneBirdleft = (innerWidthBinding / 12)
-          for (let i = 0; i <= 11; i++) {
-            if (i < 6) {
-              oneBirdleft += 20;
-              oneBirdHight -= 5;
-            } else {
-              oneBirdHight += 5
-              oneBirdleft += 24
-            }
-            birdHeightData[i] = (oneBirdHight);
-            birdleftdata[i] = (oneBirdleft);
-          }
-        }
-      }, 90000)
-    }, 250 * 1000);
   }
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
