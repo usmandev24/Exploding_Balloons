@@ -1,6 +1,7 @@
 body {
   height: 97%;
-  overflow: hidden;
+
+  overflow:hidden;
   overflow-y: hidden;
   font-family:Tohama, Verdana, sans-serif;
   
@@ -171,7 +172,9 @@ a {
   font-family: Tahoma, sans-serif;
   position: relative;
   width: 80%;
-  height: 80%;
+  height: 85%;
+  scrollbar-width: thin;
+  overflow-y: scroll;
   margin: auto;
   margin-top: 1rem;
   padding: .5 1rem;
