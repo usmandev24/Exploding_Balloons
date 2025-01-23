@@ -167,15 +167,15 @@ function move(time, lasttime) {
       if (birdHeightData[i] > -50) {
         birdHeightData[i] -= 0.2;
         birdleftdata[i] += 0.02;
-        allBirdsList[i].style.top = birdHeightData[i] + 'px';
-        allBirdsList[i].style.left = birdleftdata[i] + 'px';
+        bird.style.top = birdHeightData[i] + 'px';
+        bird.style.left = birdleftdata[i] + 'px';
         if (birdshow[i] < 1) {
           birdshow[i] += birdsizechange
-          allBirdsList[i].style.transform = `scale(${birdshow[i]})`
+          bird.style.transform = `scale(${birdshow[i]})`
         }
         else if (birdhide[i] > 0) {
           birdhide[i] -= birdsizechange;
-          allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
+          bird.style.transform = `scale(${birdhide[i]})`;
         }
       }
       i+=1;
