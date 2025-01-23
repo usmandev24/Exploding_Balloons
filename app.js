@@ -317,7 +317,7 @@ window.addEventListener('load', event => {
         birdleftdata[i] = (oneBirdleft);
       }
     }
-  }, 60000);
+  }, 150000);
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
