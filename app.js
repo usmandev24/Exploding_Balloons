@@ -64,14 +64,14 @@ let sunData = {
   boxShadow: '0px 0px 50px 20px rgba(255, 223, 0, 0.8)'
 };
 let sundatachage = {
-  topChange: innerHeightBinding * 0.8 / 60000,
-  leftChange: innerWidthBinding * 0.7 / 60000,
-  BlueChange: 255 / 4000,
-  Green1Change: 38 / 4000,
-  green2Change: 90 / 4000,
-  sGreenChange: 32 / 4000,
-  widthChange: 45 / 8000,
-  heightChage: 45 / 8000,
+  topChange: innerHeightBinding * 0.8 / 20000,
+  leftChange: innerWidthBinding * 0.7 / 20000,
+  BlueChange: 255 / 2000,
+  Green1Change: 38 / 2000,
+  green2Change: 90 / 2000,
+  sGreenChange: 32 / 2000,
+  widthChange: 45 / 4000,
+  heightChage: 45 / 4000,
 }
 over.style.left = (innerWidthBinding - over.offsetWidth) / 2 // For game over popup.
 toHome.addEventListener('click', event => {
