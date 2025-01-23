@@ -70,14 +70,14 @@ let sunData = {
   boxShadow: '0px 0px 50px 20px rgba(255, 223, 0, 0.8)'
 };
 let sundatachage = {
-  topChange: innerHeightBinding * 0.8 / 15000,
-  leftChange: innerWidthBinding * 0.7 / 15000,
-  BlueChange: 240 / 1500,
-  Green1Change: 38 / 1500,
-  green2Change: 90 / 1500,
-  sGreenChange: 32 / 1500,
-  widthChange: 45 / 3000,
-  heightChage: 45 / 3000,
+  topChange: innerHeightBinding * 0.8 / 10000,
+  leftChange: innerWidthBinding * 0.7 / 10000,
+  BlueChange: 240 / 1000,
+  Green1Change: 38 / 1000,
+  green2Change: 90 / 1000,
+  sGreenChange: 32 / 1000,
+  widthChange: 45 / 2000,
+  heightChage: 45 / 2000,
 }
 toHome.addEventListener('click', event => {
   event.stopPropagation();
@@ -190,7 +190,7 @@ function move(time, lasttime) {
       sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
-  if (round2 == 3200) {
+  if (round2 == 12000) {
     backbirddiv.style.display = 'block';
   }
   // This for ballons positions
@@ -199,7 +199,7 @@ function move(time, lasttime) {
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    if (innerWidthBinding > 460 || round2 > 3200) {
+    if (innerWidthBinding > 460 || round2 > 12000) {
       if (birdHeightData[i] > -50) {
         birdHeightData[i] -= 0.2;
         birdleftdata[i] += 0.02;
@@ -324,25 +324,27 @@ window.addEventListener('load', event => {
       }
     }, 90000);
   } else {
-    birdresetInterval = setInterval(() => {
-      birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
-      birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-      if (innerWidthBinding < 460) {
-        oneBirdHight = (innerHeightBinding / 10) * 8;
-        oneBirdleft = (innerWidthBinding / 12)
-        for (let i = 0; i <= 11; i++) {
-          if (i < 6) {
-            oneBirdleft += 20;
-            oneBirdHight -= 5;
-          } else {
-            oneBirdHight += 5
-            oneBirdleft += 24
+    setTimeout(() => {
+      birdresetInterval = setInterval(() => {
+        birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
+        birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        if (innerWidthBinding < 460) {
+          oneBirdHight = (innerHeightBinding / 10) * 8;
+          oneBirdleft = (innerWidthBinding / 12)
+          for (let i = 0; i <= 11; i++) {
+            if (i < 6) {
+              oneBirdleft += 20;
+              oneBirdHight -= 5;
+            } else {
+              oneBirdHight += 5
+              oneBirdleft += 24
+            }
+            birdHeightData[i] = (oneBirdHight);
+            birdleftdata[i] = (oneBirdleft);
           }
-          birdHeightData[i] = (oneBirdHight);
-          birdleftdata[i] = (oneBirdleft);
         }
-      }
-    }, 120000)
+      }, 90000)
+    }, 250 * 1000);
   }
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
