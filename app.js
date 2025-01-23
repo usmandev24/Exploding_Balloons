@@ -29,6 +29,7 @@ let totalScore = document.getElementById('tscore');
 let reset = 'not';
 let resetrun = 0;       //For reseting position of ballons 
 let round = 1;            //This is for how many times request frame  is called for function move; 
+let round2 = 1;           //This is similar as before was given;
 let scoreCount = 0
 let ballons = {};
 let backgroundbirds = {};
@@ -154,17 +155,15 @@ function gameplay(event) {
   innerWidthBinding = innerWidth;
   offsetWidthbinding = allBallonList[0].offsetWidth;
   maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-  if (innerWidthBinding > 46) {
+  if (innerWidthBinding > 460) {
     backbirddiv.style.display = 'block';
-  } else {
-    clearInterval(birdresetInterval)
   }
   animation = requestAnimationFrame(move);
 }
 
 function move(time, lasttime) {
+  round2 += 1;
   let i = 0;
-  let bi = 0;
   changeLeft = 0;
   let green1s;
   let green2;
@@ -191,24 +190,29 @@ function move(time, lasttime) {
       sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
+  if (round2 == 3200) {
+    backbirddiv.style.display = 'block';
+  }
   // This for ballons positions
   if (innerWidthBinding > 460 && lasttime != null) {
     angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    if (birdHeightData[i] > -50) {
-      birdHeightData[i] -= 0.2;
-      birdleftdata[i] += 0.02;
-      allBirdsList[i].style.top = birdHeightData[i] + 'px';
-      allBirdsList[i].style.left = birdleftdata[i] + 'px';
-      if (birdshow[i] < 1) {
-        birdshow[i] += birdsizechange
-        allBirdsList[i].style.transform = `scale(${birdshow[i]})`
-      }
-      else if (birdhide[i] > 0) {
-        birdhide[i] -= birdsizechange;
-        allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
+    if (innerWidthBinding > 460 || round2 > 3200) {
+      if (birdHeightData[i] > -50) {
+        birdHeightData[i] -= 0.2;
+        birdleftdata[i] += 0.02;
+        allBirdsList[i].style.top = birdHeightData[i] + 'px';
+        allBirdsList[i].style.left = birdleftdata[i] + 'px';
+        if (birdshow[i] < 1) {
+          birdshow[i] += birdsizechange
+          allBirdsList[i].style.transform = `scale(${birdshow[i]})`
+        }
+        else if (birdhide[i] > 0) {
+          birdhide[i] -= birdsizechange;
+          allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
+        }
       }
     }
     if (lasttime != null && reset == 'not') {
@@ -240,11 +244,9 @@ function move(time, lasttime) {
   }
   round += 1;  // THis is for resposiveness on desktop when window size changes
   if (round > 300) {
-    if (innerWidthBinding > 460) {
     innerWidthBinding = innerWidth;
     innerHeightBinding = innerHeight;
     maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-    }
     round = 0
   };
   reset = 'not';
@@ -303,7 +305,7 @@ window.addEventListener('load', event => {
   }
 
   // This intervel is for ressetting background birds positions
-  if (innerWidthBinding > 46) {
+  if (innerWidthBinding > 460) {
     birdresetInterval = setInterval(() => {
       birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
       birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -321,6 +323,26 @@ window.addEventListener('load', event => {
         birdleftdata[i] = (oneBirdleft);
       }
     }, 90000);
+  } else {
+    birdresetInterval = setInterval(() => {
+      birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25]
+      birdhide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+      if (innerWidthBinding < 460) {
+        oneBirdHight = (innerHeightBinding / 10) * 8;
+        oneBirdleft = (innerWidthBinding / 12)
+        for (let i = 0; i <= 11; i++) {
+          if (i < 6) {
+            oneBirdleft += 20;
+            oneBirdHight -= 5;
+          } else {
+            oneBirdHight += 5
+            oneBirdleft += 24
+          }
+          birdHeightData[i] = (oneBirdHight);
+          birdleftdata[i] = (oneBirdleft);
+        }
+      }
+    }, 120000)
   }
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
@@ -354,7 +376,7 @@ window.addEventListener('load', event => {
         cancelFani = setTimeout(() => {
           cancelAnimationFrame(fanimation);
         }, 7000);
-        fanimation = requestAnimationFrame(newtime =>fall(value, newtime, null));
+        fanimation = requestAnimationFrame(newtime => fall(value, newtime, null));
       }
       event.preventDefault();
     });
@@ -390,21 +412,21 @@ window.addEventListener('load', event => {
         cancelFani = setTimeout(() => {
           cancelAnimationFrame(fanimation);
         }, 8000);
-        fanimation = requestAnimationFrame(newtime =>fall(value, newtime, null));
-      } 
+        fanimation = requestAnimationFrame(newtime => fall(value, newtime, null));
+      }
       event.preventDefault();
     });
   }
 });
 // ---------------------------End of initial prepareation----------------------------
-function fall(value,time, lasttime) {
+function fall(value, time, lasttime) {
   topf = value.style.top
   topf = Number(topf.replace(/px/ig, ''))
   if (lasttime != null) {
     topf += (time - lasttime) * upSpeed;
   }
   value.style.top = topf + 'px';
-  fanimation = requestAnimationFrame(newtime => fall(value,newtime, time))
+  fanimation = requestAnimationFrame(newtime => fall(value, newtime, time))
 }
 function gameReset() {
   totalScore.textContent = "Your Score : " + scoreCount;

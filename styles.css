@@ -127,7 +127,7 @@ nav>ul>li {
   color: white;
   background-color: blue;
   border: 1px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 h1 {
@@ -281,7 +281,7 @@ button:active {
   display: none;
 }
 footer {
-  margin-top: 2rem;
+  margin-top: 1rem;
   background-color: snow;
   padding: 3px;
   border-radius: 10px;
@@ -312,14 +312,14 @@ footer {
     width: 20rem;
   }
   #gameOver>h2 {
-    width: 18rem;
+    width: 16rem;
   margin-left: auto;
   margin-right: auto;
   }
   #homepage{
     font-family: Tahoma, sans-serif;
     width: 90%;
-    height: 85%;
+    height: 90%;
   } 
   #homepage>h1 {
     padding-top: .8rem;
@@ -329,7 +329,7 @@ footer {
     margin-top: .8rem;
   }
   footer {
-    margin-top: 2rem;
+    margin-top: 0rem;
   }
   #game {
     background-image: url(images/mbackground.png);
