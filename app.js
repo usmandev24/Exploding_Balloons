@@ -14,7 +14,7 @@ manu.addEventListener('click', (event) => {
 })
 //----------------- Game Elements and Bindings--------------------------------------
 let game = document.getElementById('game');
-let start = document.querySelector('#start')
+let start = document.querySelector('#start')  // For home page play button
 let pauseResume = document.getElementById('pauseResume')
 let homepage = document.getElementById('homepage');
 let toHome = document.getElementById('linktohome');
@@ -27,35 +27,31 @@ let backbirddiv = document.getElementById('birddiv');
 let sun = document.getElementById('sun');
 let totalScore = document.getElementById('tscore');
 let reset = 'not';
-let resetrun = 0;
-let round = 1;
+let resetrun = 0;       //For reseting position of ballons 
+let round = 1;            //This is for how many times request frame is called;
 let scoreCount = 0
-let ballons = {};
+let ballons = {};  
 let backgroundbirds = {};
-let allBallonList;
-let allBirdsList;
-let heightData = [];
+let allBallonList;     // these are the array we got fom Object.values(ballons).
+let allBirdsList;      // Similary this.
+let birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0 ,-0.05, -0.1, -0.15, -0.2, -0.25]; // For changing bird sizes
+let birdhide = [1,1,1,1,1,1,1,1,1,1,1];
+let birdsizechange = 0.001
+let heightData = [];        // Each ballon top positon in px;
+let leftDataList = [];      //Each ballon left position in px.
 let birdHeightData = [];
 let birdleftdata = [];
-let birdsizes = {};
-let sizes;
-let birdsizeChange = 1.5 / 1000;
-birdsizeChange = Number(birdsizeChange.toFixed(3));
-let birdsizesIncList;
-let sizesdeclist;
 let animation;
 let angle = Math.PI;
-let upSpeed = 0.1;
-let sideSpeed = 0.001;
+let upSpeed = 0.1;          //for ballon
+let sideSpeed = 0.001;      //for ballon
 let innerWidthBinding = innerWidth;
-let innerHeightBinding = innerHeight
-let maxLeft;
-let left = 0;
-let leftDataList = [];
-let gameRunCount = 0;
-let changeLeft;
+let innerHeightBinding = innerHeight;
 let offsetWidthbinding;
-let height;
+let maxLeft;                 // maximum left postion in px;
+let gameRunCount = 0;    //for pause and resume functionallity;
+let changeLeft;          // For zig zag motion of ballons;
+let height;            // variable for changing ballon top positon used only in initial setup;
 let sunData = {
   width: 100,
   height: 100,
@@ -76,7 +72,7 @@ let sundatachage = {
   widthChange: 45 / 8000,
   heightChage: 45 / 8000,
 }
-over.style.left = (innerWidthBinding - over.offsetWidth) / 2
+over.style.left = (innerWidthBinding - over.offsetWidth) / 2 // For game over popup.
 toHome.addEventListener('click', event => {
   event.stopPropagation();
   gameRunCount = 0
@@ -148,14 +144,6 @@ function gameplay(event) {
   offsetWidthbinding = allBallonList[0].offsetWidth;
   maxLeft = innerWidthBinding - offsetWidthbinding - 40;
   backbirddiv.style.display = 'block';
-  birdsizesIncList = Object.values(birdsizes);
-  sizesdeclist = [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
-  sizes = Object.values(birdsizes);
-  let i = 0;
-  for (let bird of allBirdsList) {
-    bird.style.fontSize = birdsizesIncList[i] + 'rem'
-  }
-  i += 1;
   animation = requestAnimationFrame(move);
 }
 
@@ -175,12 +163,13 @@ function move(time, lasttime) {
       birdleftdata[i] += 0.02;
       allBirdsList[i].style.top = birdHeightData[i] + 'px';
       allBirdsList[i].style.left = birdleftdata[i] + 'px';
-      if (birdsizesIncList[i] < 1.6) {
-        birdsizesIncList[i] += birdsizeChange;
-        allBirdsList[i].style.fontSize = birdsizesIncList[i] + 'rem';
-      } else if (sizesdeclist[i] > 0) {
-        sizesdeclist[i] -= birdsizeChange;
-        allBirdsList[i].style.fontSize = sizesdeclist[i] + 'rem';
+      if (birdshow[i] < 1) {
+        birdshow[i] += birdsizechange
+        allBirdsList[i].style.transform = `scale(${birdshow[i]})`
+      }
+      else if (birdhide[i] > 0) {
+        birdhide[i] -= birdsizechange;
+        allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
       }
     }
     if (lasttime != null && reset == 'not') {
@@ -194,7 +183,7 @@ function move(time, lasttime) {
     i += 1;
   } 
   for (let i = 0; i < heightData.length; i++) {
-    if (heightData[i] < -50) {
+    if (heightData[i] < -70) {
       let random = Math.random()
       if (allBallonList[i].textContent != '💥' || allBallonList[i].textContent != '🎈') {
         heightData[i] = innerHeightBinding + random * 150
@@ -220,7 +209,6 @@ function move(time, lasttime) {
     green1s = sunData.shadow[1];
     green2 = sunData.backgroundcolor[1][1];
     blue = sunData.shadow[2];
-
     sun.style.top = sunData.top + 'px';
     sun.style.left = sunData.left + 'px';
     if (sunData.width > 55) {
@@ -251,16 +239,15 @@ function wait(time) {
     }, time);
   })
 }
+// For all preprations -----------------------------------------------------------------------------------------
 
 window.addEventListener('load', event => {
   let createbinding = 'ballons';
   let birdbinding = 'backbird';
-  let birdfont = -0.6;
   for (let i = 1; i <= 11; i++) {
     ballons[createbinding + i] = document.createElement('div');
     ballons[createbinding + i].setAttribute('id', createbinding + i);
     ballons[createbinding + i].className = 'bal';
-
     if (i == 10 || i == 11 || i == 6 || i == 5) {
       let bird = document.createElement('img');
       bird.setAttribute('src', "images/bird.png");
@@ -274,22 +261,12 @@ window.addEventListener('load', event => {
     backgroundbirds[birdbinding + i].setAttribute('id', birdbinding + i);
     backgroundbirds[birdbinding + i].className = 'backbirds';
     backgroundbirds[birdbinding + i].appendChild(document.createTextNode('🕊️'));
-    if (i == 6) {
-      birdfont = 0;
-      birdsizes[birdbinding + i] = birdfont;
-
-    } else if (i < 6) {
-      birdfont += 0.1;
-      birdsizes[birdbinding + i] = birdfont;
-    } else if (i > 6) {
-      birdfont -= 0.1;
-      birdsizes[birdbinding + i] = birdfont;
-    }
     backbirddiv.appendChild(backgroundbirds[birdbinding + [i]]);
-  }; // This is a part of initial setup
+  };
+   
   allBirdsList = Object.values(backgroundbirds);
   allBallonList = Object.values(ballons);
-  birdsizesIncList = Object.values(birdsizes);
+  
   let oneBirdHight = (innerHeightBinding / 10) * 8;
   let oneBirdleft = (innerWidthBinding / 10)
   for (let i = 0; i <= 11; i++) {
@@ -304,12 +281,13 @@ window.addEventListener('load', event => {
       oneBirdleft += 23
     }
     birdHeightData.push(oneBirdHight);
-
     birdleftdata.push(oneBirdleft);
-  } // This intervel is for ressetting background birds positions
+  }
+  
+   // This intervel is for ressetting background birds positions
   setInterval(() => {
-    birdsizesIncList = Object.values(birdsizes);
-    sizesdeclist = [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
+    birdshow = [-0.25, -0.2, -0.15, -0.1, -0.05, 0 ,-0.05, -0.1, -0.15, -0.2, -0.25]
+    birdhide = [1,1,1,1,1,1,1,1,1,1,1];
     if (innerWidthBinding < 460) {
       oneBirdHight = (innerHeightBinding / 10) * 8;
       oneBirdleft = (innerWidthBinding / 10)
@@ -329,18 +307,17 @@ window.addEventListener('load', event => {
       oneBirdleft = (innerWidthBinding / 10)
       for (let i = 0; i <= 11; i++) {
         if (i < 6) {
-          oneBirdleft += 40;
+          oneBirdleft += 50;
           oneBirdHight -= 5;
         } else {
           oneBirdHight += 5
-          oneBirdleft += 50
+          oneBirdleft += 60
         }
         birdHeightData[i] = (oneBirdHight);
         birdleftdata[i] = (oneBirdleft);
       }
     }
-
-  }, 90000);
+  }, 60000);
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
   for (let value of allBallonList) {
     value.addEventListener('click', (event) => {
@@ -403,7 +380,8 @@ window.addEventListener('load', event => {
       event.preventDefault();
     });
   }
-});
+});  
+ // ---------------------------End of initial prepareation----------------------------
 function gameReset() {
   totalScore.textContent = "Your Score : " + scoreCount;
   over.style.left = (innerWidthBinding - over.offsetWidth) / 2
@@ -425,6 +403,7 @@ function gameReset() {
     leftDataList[i] = (Math.floor(Math.random() * innerWidthBinding));
   }
 }
+//----------------Defuault behavior of mouse clicks and touches remmoved form here----------------------
 window.addEventListener('mousedown', event => {
   event.preventDefault()
 })
