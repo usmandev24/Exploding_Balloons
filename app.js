@@ -155,29 +155,36 @@ function gameplay(event) {
 
 function move(time, lasttime) {
   let i = 0;
+  let bi = 0;
   changeLeft = 0;
   let green1s;
   let green2;
   let blue;
+  if (innerWidthBinding > 460) {         // This is for backgorund Birds
+    for (let bird of allBirdsList) {
+      if (birdHeightData[bi] > -50) {
+        birdHeightData[bi] -= 0.2;
+        birdleftdata[bi] += 0.02;
+        bird.style.top = birdHeightData[bi] + 'px';
+        bird.style.left = birdleftdata[bi] + 'px';
+        if (birdshow[bi] < 1) {
+          birdshow[bi] += birdsizechange
+          bird.style.transform = `scale(${birdshow[bi]})`
+        }
+        else if (birdhide[bi] > 0) {
+          birdhide[bi] -= birdsizechange;
+          bird.style.transform = `scale(${birdhide[bi]})`;
+        }
+      }
+      bi+=1;
+    }
+  }
+  // This for ballons positions
   if (innerWidthBinding > 460 && lasttime != null) {
     angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(angle) * 60;
   }
   for (let ballon of allBallonList) {
-    if (innerWidthBinding > 460 && birdHeightData[i] > -50) {
-      birdHeightData[i] -= 0.2;
-      birdleftdata[i] += 0.02;
-      allBirdsList[i].style.top = birdHeightData[i] + 'px';
-      allBirdsList[i].style.left = birdleftdata[i] + 'px';
-      if (birdshow[i] < 1) {
-        birdshow[i] += birdsizechange
-        allBirdsList[i].style.transform = `scale(${birdshow[i]})`
-      }
-      else if (birdhide[i] > 0) {
-        birdhide[i] -= birdsizechange;
-        allBirdsList[i].style.transform = `scale(${birdhide[i]})`;
-      }
-    }
     if (lasttime != null && reset == 'not') {
       heightData[i] = heightData[i] - (time - lasttime) * upSpeed;
     }
@@ -188,6 +195,7 @@ function move(time, lasttime) {
     ballon.style.left = leftDataList[i] + changeLeft + 'px';
     i += 1;
   }
+  //This for ballons resetting;
   for (let i = 0; i < heightData.length; i++) {
     if (heightData[i] < -75) {
       let random = Math.random()
@@ -226,12 +234,14 @@ function move(time, lasttime) {
       sun.style.boxShadow = `0 0 50px 20px rgba(250, ${green1s}, ${blue}, 0.8)`;
     }
   }
-  round += 1;
+  round += 1;  // THis is for resposiveness on desktop when window size changes
   if (round > 300) {
-    round = 0;
+    if (innerWidthBinding > 460) {
     innerWidthBinding = innerWidth;
     innerHeightBinding = innerHeight;
     maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+    }
+    round = 0
   };
   reset = 'not';
   animation = requestAnimationFrame(newtime => move(newtime, time))
