@@ -19,9 +19,6 @@ let pauseResume = document.getElementById('pauseResume')
 let homepage = document.getElementById('homepage');
 if (innerHeight >= homepage.offsetHeight * 2) {
   homepage.style.top = 150 + 'px';
-} else if (innerHeight <= homepage.offsetHeight + 20) {
-  homepage.style.overflowY = 'scroll';
-  homepage.style.height = '90%';
 }
 let toHome = document.getElementById('linktohome');
 let score = document.getElementById('score');
