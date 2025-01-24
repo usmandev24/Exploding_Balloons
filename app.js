@@ -245,7 +245,7 @@ function move(time, lasttime) {
     }
   }
   round += 1;  // THis is for resposiveness on desktop when window size changes
-  if (round > 300) {
+  if (round > 50) {
     innerWidthBinding = innerWidth;
     innerHeightBinding = innerHeight;
     maxLeft = innerWidthBinding - offsetWidthbinding - 40;
