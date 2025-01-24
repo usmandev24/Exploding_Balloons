@@ -165,6 +165,13 @@ function gameplay(event) {
 
 function move(time, lasttime) {
   let i = 0;
+  round += 1;  // THis is for resposiveness on desktop when window size changes
+  if (round > 50) {
+    innerWidthBinding = innerWidth;
+    innerHeightBinding = innerHeight;
+    maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+    round = 0
+  };
   if (innerWidthBinding > 460) {
     for (let bird of allBirdsList) {
       if (birdHeightData[i] > -50) {
@@ -244,13 +251,7 @@ function move(time, lasttime) {
       }
     }
   }
-  round += 1;  // THis is for resposiveness on desktop when window size changes
-  if (round > 50) {
-    innerWidthBinding = innerWidth;
-    innerHeightBinding = innerHeight;
-    maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-    round = 0
-  };
+
   reset = 'not';
   animation = requestAnimationFrame(newtime => move(newtime, time))
 }
