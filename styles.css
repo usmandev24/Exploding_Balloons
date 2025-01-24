@@ -1,10 +1,7 @@
 body {
   height: 97%;
-
   overflow:hidden;
-  overflow-y: hidden;
   font-family:Tohama, Verdana, sans-serif;
-  
 }
 
 nav {
@@ -171,7 +168,7 @@ a {
   font-family: Tahoma, sans-serif;
   position: relative;
   width: 80%;
-  height: 85%;
+  height: max-content;
   scrollbar-width: thin;
   overflow-y: scroll;
   margin: auto;
@@ -323,7 +320,7 @@ footer {
   #homepage{
     font-family: Tahoma, sans-serif;
     width: 90%;
-    height: 90%;
+    height: max-content;
   } 
   #homepage>h1 {
     padding-top: .8rem;
