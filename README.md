@@ -1,7 +1,7 @@
 
 # Exploding Balloons
 
-Exploding Balloons is an interactive web-based game developed using JavaScript, HTML, and CSS. The objective is to click on moving balloons to explode them, providing an engaging and fun experience for users.
+Exploding Balloons is an interactive web-based game developed using pure **JavaScript**, **HTML**, and **CSS**. The objective is to click on moving balloons to explode them, providing an engaging and fun experience for users.
 But players can only explode balloons not any birds.
 
 ## Features
