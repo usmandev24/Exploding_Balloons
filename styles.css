@@ -151,12 +151,12 @@ h1 {
 
 #game {
   display: none;
-  background-color: beige;
   width: 100vw;
   overflow: hidden;
   background-image: url(images/deskBackground.png);
-  background-repeat: repeat;
   background-size: cover;
+  background-repeat:no-repeat;
+  background-color: skyblue;
   margin-left: -8px;
 }
 
@@ -197,6 +197,8 @@ a {
 body {
   background-image: url(images/deskBackground.png);
   background-size:cover;
+  background-repeat: no-repeat;
+  background-color: skyblue;
 }
 #gameOver {
   display: none;
