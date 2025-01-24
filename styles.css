@@ -1,6 +1,6 @@
 body {
-  height: 100vh;
-  width: 100vw;
+  height: 97%;
+
   overflow:hidden;
   overflow-y: hidden;
   font-family:Tohama, Verdana, sans-serif;
@@ -26,7 +26,6 @@ nav>ul {
   align-items: center;
   margin: 0 -7px;
   height: 2.6em;
-  width: 100vw;
 }
 
 nav>ul>li {
@@ -351,5 +350,11 @@ footer {
     top: 0;
     left: 0;
     z-index: 1;
+  }
+}
+@media (pointer : coarse) and (hover : none) and (min-width : 500px) {
+  #dclouds {
+    max-width: 100vw;
+    max-height: 80%;
   }
 }
