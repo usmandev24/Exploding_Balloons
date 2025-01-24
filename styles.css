@@ -169,8 +169,6 @@ a {
   position: relative;
   width: 80%;
   height: max-content;
-  scrollbar-width: thin;
-  overflow-y: scroll;
   margin: auto;
   margin-top: 1rem;
   padding: .5 1rem;
