@@ -474,7 +474,7 @@ function runGame(gameState, event) {
   function move(time, lasttime) {
     innerWidthBinding = innerWidth;
     innerHeightBinding = innerHeight;
-    status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+    status.maxLeft = innerWidthBinding - offsetWidthbinding - 60;
     if (innerWidthBinding > 460) {
       gameState.backBirds.update(status.birdsizechange)
     }
