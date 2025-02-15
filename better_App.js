@@ -150,6 +150,8 @@ const DOM = {
   backbirdDiv: document.getElementById('birddiv'),
   sunDiv: document.getElementById('sun'),
   tScoreDiv: document.getElementById('tscore'),
+  backSound: document.getElementById("backsound"),
+  shoot : document.getElementById("shootsound"),
 }
 
 let preStatus = {
@@ -208,7 +210,8 @@ function setEvents(gameState) {
   let list = gameState.ballons.list;
   dom.toHome.addEventListener('click', event => {
     event.stopPropagation();
-    status.gameRunCount = 0
+    status.gameRunCount = 0;
+    dom.backSound.pause();
     cancelAnimationFrame(status.animation);
     dom.gameDiv.style.display = 'none';
     dom.homepage.style.display = 'block';
@@ -243,7 +246,8 @@ function setEvents(gameState) {
       runGame(gameState, event);
       dom.cover.style.display = 'none';
     } else if (status.gameRunCount == 1) {
-      status.gameRunCount = 0
+      status.gameRunCount = 0;
+      dom.backSound.pause();
       cancelAnimationFrame(status.animation);
       dom.pauseResume.style.background = 'yellow';
       dom.pauseResume.style.color = 'blue';
@@ -270,6 +274,7 @@ function setEvents(gameState) {
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
+        dom.shoot.pause(); dom.shoot.currentTime = 0;   dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
         if (status.scoreCount % 10 == 0) {
@@ -306,6 +311,7 @@ function setEvents(gameState) {
     value.addEventListener('touchstart', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
+        dom.shoot.pause(); dom.shoot.currentTime = 0;   dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
         if (status.scoreCount % 10 == 0) {
@@ -445,6 +451,7 @@ function runGame(gameState, event) {
     status.gameOut = false
   }
   event.preventDefault()
+  dom.backSound.play();
   dom.cover.style.display = 'none'
   dom.over.style.display = 'none';
   dom.homepage.style.display = 'none';
