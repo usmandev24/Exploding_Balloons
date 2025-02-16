@@ -53,17 +53,21 @@ class Ballons {
 }
 
 class Backbirds {
-  constructor(list, topValues, leftValues) {
+  constructor(list, topValues, leftValues, show, hide) {
     this.list = list;
     this.topValues = topValues;
     this.leftValues = leftValues;
-    this.show = [-0.25, -0.2, -0.15, -0.1, -0.05, 0, -0.05, -0.1, -0.15, -0.2, -0.25];
-    this.hide = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    this.show = show;
+    this.hide = hide;
   }
   static create(count) {
     let birdsList = [];
     let topValues = [];
     let leftValues = [];
+    let show = [];
+    let hide = [];
+    let scale = Number((-0.05 * count / 2).toFixed(2))
+    let scaleChange = 0.05;
     let oneBirdtop = (innerHeightBinding / 10) * 8;
     let oneBirdleft = (innerWidthBinding / 10);
     let div;
@@ -71,17 +75,24 @@ class Backbirds {
       div = elt('div', { "class": "backbirds" }, document.createTextNode('🕊️'))
       birdsList.push(div);
       DOM.backbirdDiv.appendChild(div)
-      if (i < 6) {
+      if (i < count / 2) {
         oneBirdleft += 20;
         oneBirdtop -= 5;
+
       } else {
         oneBirdtop += 5
         oneBirdleft += 23
       }
+      show.push(scale);
+      scale = Number((scale + scaleChange).toFixed(2));
+      if (scale == 0) {
+        scaleChange = -0.05;
+      }
+      hide.push(1);
       topValues.push(oneBirdtop);
       leftValues.push(oneBirdleft);
     }
-    return new Backbirds(birdsList, topValues, leftValues);
+    return new Backbirds(birdsList, topValues, leftValues, show, hide);
   }
 }
 
@@ -151,7 +162,8 @@ const DOM = {
   sunDiv: document.getElementById('sun'),
   tScoreDiv: document.getElementById('tscore'),
   backSound: document.getElementById("backsound"),
-  shoot : document.getElementById("shootsound"),
+  shoot: document.getElementById("shootsound"),
+  overSound: document.getElementById("oversound"),
 }
 
 let preStatus = {
@@ -164,7 +176,7 @@ let preStatus = {
   angle: Math.PI,
   upSpeed: 0.1,         //for ballon
   sideSpeed: 0.001,
-  birdsizechange: 0.001,
+  birdsizechange: 0.0012,
   gameRunCount: 0,
 }
 
@@ -203,11 +215,13 @@ class GameState {
     }, 200);
   }
 }
+// this fuction take a state  and add all events 
 function setEvents(gameState) {
   let status = gameState.status;
   let dom = gameState.dom;
   let ballons = gameState.ballons;
   let list = gameState.ballons.list;
+
   dom.toHome.addEventListener('click', event => {
     event.stopPropagation();
     status.gameRunCount = 0;
@@ -215,7 +229,6 @@ function setEvents(gameState) {
     cancelAnimationFrame(status.animation);
     dom.gameDiv.style.display = 'none';
     dom.homepage.style.display = 'block';
-  
     dom.pauseResume.style.color = 'blue';
     dom.pauseResume.style.fontSize = '1.3rem';
     if (dom.pauseResume.textContent != 'Play') {
@@ -226,6 +239,7 @@ function setEvents(gameState) {
     dom.cover.style.display = 'none';
     dom.over.style.display = 'none'
   })
+
   dom.startGame.addEventListener('click', event => {
     event.stopPropagation();
     if (status.resetrun == 1) {
@@ -239,6 +253,7 @@ function setEvents(gameState) {
     status.resetrun = 1;
     runGame(gameState, event);
   });
+
   dom.pauseResume.addEventListener('click', event => {
     event.stopPropagation();
     if (status.gameRunCount == 0) {
@@ -259,22 +274,26 @@ function setEvents(gameState) {
     }
     event.preventDefault();
   });
+
   dom.homepage.addEventListener('click', event => {
     dom.manueItems.style.display = 'none';
   })
+
   dom.toHome.addEventListener('click', event => {
     event.stopPropagation();
     setTimeout(() => {
       dom.manueItems.style.display = 'none';
     }, 100);
   })
+
   dom.again.addEventListener('click', event => runGame(gameState, event));
 
+  // To pop ballons ....
   for (let value of ballons.list) {
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
-        dom.shoot.pause(); dom.shoot.currentTime = 0;   dom.shoot.play();
+        dom.shoot.pause(); dom.shoot.currentTime = 0; dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
         if (status.scoreCount % 10 == 0) {
@@ -295,6 +314,8 @@ function setEvents(gameState) {
           value.style.display = 'none'
         }, 50);
       } else {
+        dom.backSound.pause();
+        dom.overSound.play();
         cancelAnimationFrame(status.animation);
         value.style.transform = 'rotate(180deg)';
         gameState.resetStatus();
@@ -311,7 +332,7 @@ function setEvents(gameState) {
     value.addEventListener('touchstart', (event) => {
       if (value.textContent == '🎈') {
         value.textContent = '💥';
-        dom.shoot.pause(); dom.shoot.currentTime = 0;   dom.shoot.play();
+        dom.shoot.pause(); dom.shoot.currentTime = 0; dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
         if (status.scoreCount % 10 == 0) {
@@ -332,6 +353,8 @@ function setEvents(gameState) {
           value.style.display = 'none'
         }, 50);
       } else {
+        dom.backSound.pause();
+        dom.overSound.play();
         cancelAnimationFrame(status.animation);
         value.style.transform = 'rotate(180deg)';
         gameState.resetStatus();
@@ -346,6 +369,8 @@ function setEvents(gameState) {
     });
   }
 }
+
+// For updating ballons positon to make animation.....
 Ballons.prototype.update = function (reset, maxLeft, time, lasttime) {
   let index = 0;
   let changeLeft = 0;
@@ -408,19 +433,33 @@ Backbirds.prototype.update = function (birdsizechange) {
   }
 }
 Backbirds.prototype.resetPosition = function () {
+  let count = this.list.length
   let oneBirdtop = (innerHeightBinding / 10) * 8;
-  let oneBirdleft = (innerWidthBinding / 10)
-  for (let i = 0; i <= 11; i++) {
-    if (i < 6) {
-      oneBirdleft += 50;
+  let oneBirdleft = (innerWidthBinding / count + 2);
+  let left = oneBirdleft / 1.5;
+  let show = [];
+  let hide = [];
+  let scale = Number((-0.05 * count / 2).toFixed(2))
+  let scaleChange = 0.05;
+  for (let i = 0; i < count; i++) {
+    this.topValues[i] = oneBirdtop;
+    this.leftValues[i] = oneBirdleft;
+    if (i < count / 2) {
+      oneBirdleft += left + 10;
       oneBirdtop -= 5;
     } else {
       oneBirdtop += 5
-      oneBirdleft += 60
+      oneBirdleft += left + 20
     }
-    this.topValues[i] = oneBirdtop;
-    this.leftValues[i] = oneBirdleft;
+    show.push(scale);
+    scale = Number((scale + scaleChange).toFixed(2));
+    if (scale == 0) {
+      scaleChange = -0.05;
+    }
+    hide.push(1);
   }
+  this.show = show;
+  this.hide = hide;
 }
 function fall(value, status, time, lasttime) {
   topf = value.style.top
@@ -451,6 +490,7 @@ function runGame(gameState, event) {
     status.gameOut = false
   }
   event.preventDefault()
+  dom.backSound.currentTime = 0;
   dom.backSound.play();
   dom.cover.style.display = 'none'
   dom.over.style.display = 'none';
@@ -460,7 +500,7 @@ function runGame(gameState, event) {
   dom.pauseResume.style.fontSize = '1.3rem';
   dom.pauseResume.textContent = 'Pause';
   dom.pauseResume.style.padding = '2px 1rem';
-  dom.gameDiv.style.display = 'block';console.log(dom.gameDiv);
+  dom.gameDiv.style.display = 'block';
   dom.gameDiv.style.height = innerHeight + 'px';
   status.gameRunCount += 1;
   innerWidthBinding = innerWidth;
@@ -474,7 +514,7 @@ function runGame(gameState, event) {
   function move(time, lasttime) {
     innerWidthBinding = innerWidth;
     innerHeightBinding = innerHeight;
-    status.maxLeft = innerWidthBinding - offsetWidthbinding - 60;
+    status.maxLeft = innerWidthBinding - offsetWidthbinding - 20;
     if (innerWidthBinding > 460) {
       gameState.backBirds.update(status.birdsizechange)
     }
@@ -483,7 +523,7 @@ function runGame(gameState, event) {
       sun.update()
     }
     gameState.ballons.update(status.reset, status.maxLeft,
-                             time, lasttime)
+      time, lasttime)
     gameState.ballons.resetPosition(status.maxLeft);
     status.reset = "not";
     status.animation = requestAnimationFrame(newTime => move(newTime, time))
@@ -506,11 +546,22 @@ function stopDefaults(dom) {
 function main() {
   let manu = new ManueBar();
   manu.addEvent();
+  if (innerHeight >= DOM.homepage.offsetHeight * 2) {
+    DOM.homepage.style.top = 150 + 'px';
+  }
+  // First argument to Ballons.create and Backbirds.create tell how much number of ballons or 
+  // backbirds to create.
+
   let ballons = Ballons.create(12, preStatus.upSpeed, preStatus.sideSpeed);
   let backbirds = Backbirds.create(12);
   let sun = new Sun(DOM.sunDiv)
   let gameState = new GameState(DOM, preStatus, ballons, backbirds, sun);
   setEvents(gameState);
+  if (innerWidthBinding > 460) {
+    setInterval(() => {
+      backbirds.resetPosition();
+    }, 60000);
+  }
   stopDefaults(DOM);
 }
 window.addEventListener("load", () => {
