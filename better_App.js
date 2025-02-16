@@ -79,7 +79,7 @@ class Backbirds {
 
       } else {
         oneBirdtop += 5
-        oneBirdleft += 23
+        oneBirdleft += 20
       }
       show.push(scale);
       scale = Number((scale + scaleChange).toFixed(2));
@@ -165,11 +165,11 @@ const DOM = {
 }
 
 class GameState {
-  constructor(dom, status,levelchange, ballons, backBirds, sun) {
+  constructor(dom, status, levelchange, ballons, backBirds, sun) {
     this.dom = dom;
-    this.levelchange = {...levelchange}; // const contains info about how level increase effects
-    this.status = {...status}; // this changes ... when game run
-    this.preStatus = {...status}; // const prestatus
+    this.levelchange = { ...levelchange }; // const contains info about how level increase effects
+    this.status = { ...status }; // this changes ... when game run
+    this.preStatus = { ...status }; // const prestatus
     this.ballons = ballons
     this.backBirds = backBirds
     this.sun = sun;
@@ -279,7 +279,7 @@ function setEvents(gameState) {
     runGame(gameState, event)
   })
 
-  // To pop ballons ....
+  // To pop ballons ....  For desktop
   for (let value of ballons.list) {
     value.addEventListener('click', (event) => {
       if (value.textContent == '🎈') {
@@ -324,7 +324,7 @@ function setEvents(gameState) {
         if (status.scoreCount % incr.level == 0) {
           dom.levelDiv.textContent = 'Level: ' + Math.floor(status.scoreCount / incr.level)
           status.upSpeed += incr.upSpeed;
-          status.sideSpeed += incr.sideSpeed; 
+          status.sideSpeed += incr.sideSpeed;
         }
         let hide = setTimeout(() => {
           value.style.display = 'none'
@@ -352,7 +352,7 @@ function setEvents(gameState) {
 }
 
 // For updating ballons positon to make animation.....
-Ballons.prototype.update = function (reset, maxLeft,upSpeed, sideSpeed, time, lasttime) {
+Ballons.prototype.update = function (reset, maxLeft, upSpeed, sideSpeed, time, lasttime) {
   let index = 0;
   let changeLeft = 0;
   if (innerWidthBinding > 460 && lasttime != null) {
@@ -398,7 +398,7 @@ Backbirds.prototype.update = function (birdsizechange) {
   for (let bird of this.list) {
     if (this.topValues[i] > -50) {
       this.topValues[i] -= 0.2;
-      this.leftValues[i] += 0.02; 
+      this.leftValues[i] += 0.02;
       bird.style.top = this.topValues[i] + 'px';
       bird.style.left = this.leftValues[i] + 'px';
       if (show[i] < 1) {
@@ -418,6 +418,9 @@ Backbirds.prototype.resetPosition = function () {
   let oneBirdtop = (innerHeightBinding / 10) * 8;
   let oneBirdleft = (innerWidthBinding / count + 2);
   let left = oneBirdleft / 2;
+  if (innerWidthBinding < 460) {
+    left = 10
+  }
   let show = [];
   let hide = [];
   let scale = Number((-0.05 * count / 2).toFixed(2))
@@ -430,7 +433,7 @@ Backbirds.prototype.resetPosition = function () {
       oneBirdtop -= 5;
     } else {
       oneBirdtop += 5
-      oneBirdleft += left + 20
+      oneBirdleft += left + 10
     }
     show.push(scale);
     scale = Number((scale + scaleChange).toFixed(2));
@@ -486,27 +489,69 @@ function runGame(gameState, event) {
   innerWidthBinding = innerWidth;
   let offsetWidthbinding = gameState.ballons.list[0].offsetWidth;
   status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-  if (innerWidthBinding > 460) {
+  if (innerWidthBinding > 46) {
     dom.backbirdDiv.style.display = 'block';
   }
   status.animation = requestAnimationFrame(move);
 
   function move(time, lasttime) {
-    innerWidthBinding = innerWidth;
-    innerHeightBinding = innerHeight;
-    status.maxLeft = innerWidthBinding - offsetWidthbinding - 20;
-    if (innerWidthBinding > 460) {
-      gameState.backBirds.update(status.birdsizechange)
+    status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+    if (innerWidthBinding > 46) {
+      gameState.backBirds.update(status.birdsizechange);
     }
     let sun = gameState.sun;
     if (sun.status.top > -50) {
-      sun.update()
+      sun.update();
     }
-    gameState.ballons.update(status.reset, status.maxLeft,status.upSpeed, status.sideSpeed,
-      time, lasttime)
+    gameState.ballons.update(status.reset, status.maxLeft, status.upSpeed, status.sideSpeed,
+                            time, lasttime);
     gameState.ballons.resetPosition(status.maxLeft);
     status.reset = "not";
     status.animation = requestAnimationFrame(newTime => move(newTime, time))
+  }
+}
+function makeResposive(backbirds) {
+  let clear = false;
+  let mwidth;
+  let mheight;
+  let portait = screen.orientation.angle === 0;
+  if (portait) {
+    mwidth = innerWidth;
+    mheight = innerHeight;
+  } else {
+    mwidth = innerHeight;
+    mheight = innerWidth;
+  }
+  window.addEventListener("orientationchange" , () => {
+    let angle = screen.orientation.angle;
+    window.removeEventListener("resize", resoposive);
+    if (angle === 90) {
+      innerWidthBinding = mheight
+      innerHeightBinding = mwidth;
+    } else if (angle === 0) {
+      innerWidthBinding = mwidth;
+      innerHeightBinding = mheight;
+    }
+  })
+  let birdRestInterval;
+  if (innerWidthBinding > 46) {
+    birdRestInterval = setInterval(() => {
+      backbirds.resetPosition();
+    }, 60000);
+  }
+  window.addEventListener("resize", resoposive)
+  function resoposive() {   
+    innerHeightBinding = innerHeight;
+    innerWidthBinding = innerWidth;
+    if (innerWidthBinding < 46 && !clear) {
+      clearInterval(birdRestInterval);
+      clear = true;
+    } else if (clear  && innerWidthBinding > 460) {
+      birdRestInterval = setInterval(() => {
+        backbirds.resetPosition();
+      }, 60000);
+      clear = false;
+    }
   }
 }
 function stopDefaults(dom) {
@@ -523,17 +568,15 @@ function stopDefaults(dom) {
     event.preventDefault()
   })
 }
+
 function main() {
   let manu = new ManueBar();
   manu.addEvent();
   if (innerHeight >= DOM.homepage.offsetHeight * 2) {
     DOM.homepage.style.top = 150 + 'px';
   }
-  // First argument to Ballons.create and Backbirds.create tell how much number of ballons or 
-  // backbirds to create.
-
   let ballons = Ballons.create(12);
-  let backbirds = Backbirds.create(12);
+  let backbirds = Backbirds.create(6);
   let sun = new Sun(DOM.sunDiv);
   const preStatus = {
     reset: "not",
@@ -543,24 +586,20 @@ function main() {
     level: 1,
     gameOut: false,
     angle: Math.PI,
-    upSpeed: 0.1,         //for ballons
-    sideSpeed: 0.001,     //ballons
+    upSpeed: 0.1,                //for ballons
+    sideSpeed: 0.001,            //ballons
     birdsizechange: 0.0012,
     gameRunCount: 0,
   }
   const levelChanges = {
     upSpeed: 0.007,
-    sideSpeed : 0.0001,
-    level : 10, // each 10 score will increase level;
-  }   
+    sideSpeed: 0.0001,
+    level: 10,                   // each 10 score will increase level;
+  }
   let gameState = new GameState(DOM, preStatus, levelChanges, ballons, backbirds, sun);
   setEvents(gameState);
-  if (innerWidthBinding > 460) {
-    setInterval(() => {
-      backbirds.resetPosition();
-    }, 60000);
-  }
   stopDefaults(DOM);
+  makeResposive(gameState.backBirds)
 }
 window.addEventListener("load", () => {
   main();
