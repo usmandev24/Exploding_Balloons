@@ -274,7 +274,10 @@ function setEvents(gameState) {
     }, 100);
   })
 
-  dom.again.addEventListener('click', event => runGame(gameState, event));
+  dom.again.addEventListener('click', event => {
+    dom.backSound.currentTime = 0;
+    runGame(gameState, event)
+  })
 
   // To pop ballons ....
   for (let value of ballons.list) {
@@ -414,7 +417,7 @@ Backbirds.prototype.resetPosition = function () {
   let count = this.list.length
   let oneBirdtop = (innerHeightBinding / 10) * 8;
   let oneBirdleft = (innerWidthBinding / count + 2);
-  let left = oneBirdleft / 1.5;
+  let left = oneBirdleft / 2;
   let show = [];
   let hide = [];
   let scale = Number((-0.05 * count / 2).toFixed(2))
@@ -468,7 +471,6 @@ function runGame(gameState, event) {
     status.gameOut = false
   }
   event.preventDefault()
-  dom.backSound.currentTime = 0;
   dom.backSound.play();
   dom.cover.style.display = 'none'
   dom.over.style.display = 'none';
@@ -547,7 +549,7 @@ function main() {
     gameRunCount: 0,
   }
   const levelChanges = {
-    upSpeed: 0.001,
+    upSpeed: 0.007,
     sideSpeed : 0.0001,
     level : 10, // each 10 score will increase level;
   }   
