@@ -74,12 +74,12 @@ class Backbirds {
       birdsList.push(div);
       DOM.backbirdDiv.appendChild(div)
       if (i < count / 2) {
-        oneBirdleft += 20;
+        oneBirdleft += 40;
         oneBirdtop -= 5;
 
       } else {
         oneBirdtop += 5
-        oneBirdleft += 20
+        oneBirdleft += 50
       }
       show.push(scale);
       scale = Number((scale + scaleChange).toFixed(2));
@@ -433,7 +433,7 @@ Backbirds.prototype.resetPosition = function () {
       oneBirdtop -= 5;
     } else {
       oneBirdtop += 5
-      oneBirdleft += left + 10
+      oneBirdleft += left + 20
     }
     show.push(scale);
     scale = Number((scale + scaleChange).toFixed(2));
@@ -489,14 +489,14 @@ function runGame(gameState, event) {
   innerWidthBinding = innerWidth;
   let offsetWidthbinding = gameState.ballons.list[0].offsetWidth;
   status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-  if (innerWidthBinding > 46) {
+  if (innerWidthBinding > 460) {
     dom.backbirdDiv.style.display = 'block';
   }
   status.animation = requestAnimationFrame(move);
 
   function move(time, lasttime) {
     status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
-    if (innerWidthBinding > 46) {
+    if (innerWidthBinding > 460) {
       gameState.backBirds.update(status.birdsizechange);
     }
     let sun = gameState.sun;
@@ -510,7 +510,7 @@ function runGame(gameState, event) {
     status.animation = requestAnimationFrame(newTime => move(newTime, time))
   }
 }
-function makeResposive(backbirds) {
+function makeResposive(state) {
   let clear = false;
   let mwidth;
   let mheight;
@@ -534,22 +534,22 @@ function makeResposive(backbirds) {
     }
   })
   let birdRestInterval;
-  if (innerWidthBinding > 46) {
+  if (innerWidthBinding > 460) {
     birdRestInterval = setInterval(() => {
-      backbirds.resetPosition();
-    }, 60000);
+      state.backBirds.resetPosition();
+    }, 90000);
   }
   window.addEventListener("resize", resoposive)
   function resoposive() {   
     innerHeightBinding = innerHeight;
     innerWidthBinding = innerWidth;
-    if (innerWidthBinding < 46 && !clear) {
+    if (innerWidthBinding < 460 && !clear) {
       clearInterval(birdRestInterval);
       clear = true;
     } else if (clear  && innerWidthBinding > 460) {
       birdRestInterval = setInterval(() => {
-        backbirds.resetPosition();
-      }, 60000);
+        state.backBirds.resetPosition();
+      }, 90000);
       clear = false;
     }
   }
@@ -576,7 +576,7 @@ function main() {
     DOM.homepage.style.top = 150 + 'px';
   }
   let ballons = Ballons.create(12);
-  let backbirds = Backbirds.create(6);
+  let backbirds = Backbirds.create(14);
   let sun = new Sun(DOM.sunDiv);
   const preStatus = {
     reset: "not",
@@ -599,7 +599,7 @@ function main() {
   let gameState = new GameState(DOM, preStatus, levelChanges, ballons, backbirds, sun);
   setEvents(gameState);
   stopDefaults(DOM);
-  makeResposive(gameState.backBirds)
+  makeResposive(gameState)
 }
 window.addEventListener("load", () => {
   main();
