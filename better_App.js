@@ -74,12 +74,12 @@ class Backbirds {
       birdsList.push(div);
       DOM.backbirdDiv.appendChild(div)
       if (i < count / 2) {
-        oneBirdleft += 40;
+        oneBirdleft += 30;
         oneBirdtop -= 5;
 
       } else {
         oneBirdtop += 5
-        oneBirdleft += 50
+        oneBirdleft += 35
       }
       show.push(scale);
       scale = Number((scale + scaleChange).toFixed(2));
@@ -510,7 +510,7 @@ function runGame(gameState, event) {
     status.animation = requestAnimationFrame(newTime => move(newTime, time))
   }
 }
-function makeResposive(state) {
+function makeResponsive(state) {
   let clear = false;
   let mwidth;
   let mheight;
@@ -526,9 +526,11 @@ function makeResposive(state) {
     let angle = screen.orientation.angle;
     window.removeEventListener("resize", resoposive);
     if (angle === 90) {
+      state.dom.backbirdDiv.style.display = "block";
       innerWidthBinding = mheight
       innerHeightBinding = mwidth;
     } else if (angle === 0) {
+      state.dom.backbirdDiv.style.display = "none";
       innerWidthBinding = mwidth;
       innerHeightBinding = mheight;
     }
@@ -576,7 +578,7 @@ function main() {
     DOM.homepage.style.top = 150 + 'px';
   }
   let ballons = Ballons.create(12);
-  let backbirds = Backbirds.create(14);
+  let backbirds = Backbirds.create(10);
   let sun = new Sun(DOM.sunDiv);
   const preStatus = {
     reset: "not",
@@ -599,7 +601,7 @@ function main() {
   let gameState = new GameState(DOM, preStatus, levelChanges, ballons, backbirds, sun);
   setEvents(gameState);
   stopDefaults(DOM);
-  makeResposive(gameState)
+  makeResponsive(gameState)
 }
 window.addEventListener("load", () => {
   main();
