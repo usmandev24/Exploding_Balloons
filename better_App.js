@@ -21,15 +21,13 @@ let innerHeightBinding = innerHeight;
 let innerWidthBinding = innerWidth;
 
 class Ballons {
-  constructor(list, topValues, leftValues, upSpeed, sideSpeed) {
+  constructor(list, topValues, leftValues) {
     this.list = list;
     this.topValues = topValues;
     this.leftValues = leftValues;
-    this.upSpeed = upSpeed;
-    this.sideSpeed = sideSpeed;
     this.angle = Math.PI
   }
-  static create(count, upSpeed, sideSpeed) {
+  static create(count) {
     let list = [];
     let topValues = [];
     let leftValues = [];
@@ -48,7 +46,7 @@ class Ballons {
       topValues.push(innerHeightBinding - Math.random() * innerHeightBinding);
       leftValues.push(Math.floor(Math.random() * innerWidthBinding))
     }
-    return new Ballons(list, topValues, leftValues, upSpeed, sideSpeed);
+    return new Ballons(list, topValues, leftValues);
   }
 }
 
@@ -166,24 +164,12 @@ const DOM = {
   overSound: document.getElementById("oversound"),
 }
 
-let preStatus = {
-  reset: "not",
-  resetrun: 0,
-  round: 1,
-  scoreCount: 0,
-  level: 1,
-  gameOut: false,
-  angle: Math.PI,
-  upSpeed: 0.1,         //for ballon
-  sideSpeed: 0.001,
-  birdsizechange: 0.0012,
-  gameRunCount: 0,
-}
-
 class GameState {
-  constructor(dom, status, ballons, backBirds, sun) {
+  constructor(dom, status,levelchange, ballons, backBirds, sun) {
     this.dom = dom;
-    this.status = status;
+    this.levelchange = {...levelchange}; // const contains info about how level increase effects
+    this.status = {...status}; // this changes ... when game run
+    this.preStatus = {...status}; // const prestatus
     this.ballons = ballons
     this.backBirds = backBirds
     this.sun = sun;
@@ -191,11 +177,12 @@ class GameState {
   resetStatus() {
     let status = this.status;
     let dom = this.dom;
+    let preStatus = this.preStatus;
     dom.tScoreDiv.textContent = "Your Score : " + status.scoreCount;
-    status.upSpeed = 0.1;
-    status.sideSpeed = 0.001;
-    status.scoreCount = 0;
-    status.gameRunCount = 0;
+    status.upSpeed = preStatus.upSpeed;
+    status.sideSpeed = preStatus.sideSpeed;
+    status.scoreCount = preStatus.scoreCount;
+    status.gameRunCount = preStatus.gameRunCount;
     dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
     dom.levelDiv.textContent = 'Level: 1';
     dom.pauseResume.style.background = 'white';
@@ -221,6 +208,7 @@ function setEvents(gameState) {
   let dom = gameState.dom;
   let ballons = gameState.ballons;
   let list = gameState.ballons.list;
+  let incr = gameState.levelchange
 
   dom.toHome.addEventListener('click', event => {
     event.stopPropagation();
@@ -296,15 +284,10 @@ function setEvents(gameState) {
         dom.shoot.pause(); dom.shoot.currentTime = 0; dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
-        if (status.scoreCount % 10 == 0) {
-          dom.levelDiv.textContent = 'Level: ' + Math.floor(status.scoreCount / 10)
-          if (innerWidthBinding < 460) {
-            status.upSpeed += 0.005;
-            status.sideSpeed += 0.0001;
-          } else {
-            status.upSpeed += 0.005;
-            status.sideSpeed += 0.0001;
-          }
+        if (status.scoreCount % incr.level == 0) {
+          dom.levelDiv.textContent = 'Level: ' + Math.floor(status.scoreCount / incr.level)
+          status.upSpeed += incr.upSpeed;
+          status.sideSpeed += incr.sideSpeed;
         }
         let hide = setTimeout(() => {
           value.style.display = 'none'
@@ -335,15 +318,10 @@ function setEvents(gameState) {
         dom.shoot.pause(); dom.shoot.currentTime = 0; dom.shoot.play();
         status.scoreCount += 1
         dom.scoreDiv.textContent = 'Score: ' + status.scoreCount;
-        if (status.scoreCount % 10 == 0) {
-          dom.levelDiv.textContent = 'Level: ' + Math.floor(status.scoreCount / 10)
-          if (innerWidthBinding < 460) {
-            status.upSpeed += 0.005;
-            status.sideSpeed += 0.0001;
-          } else {
-            status.upSpeed += 0.005;
-            status.sideSpeed += 0.0001;
-          }
+        if (status.scoreCount % incr.level == 0) {
+          dom.levelDiv.textContent = 'Level: ' + Math.floor(status.scoreCount / incr.level)
+          status.upSpeed += incr.upSpeed;
+          status.sideSpeed += incr.sideSpeed; 
         }
         let hide = setTimeout(() => {
           value.style.display = 'none'
@@ -371,16 +349,16 @@ function setEvents(gameState) {
 }
 
 // For updating ballons positon to make animation.....
-Ballons.prototype.update = function (reset, maxLeft, time, lasttime) {
+Ballons.prototype.update = function (reset, maxLeft,upSpeed, sideSpeed, time, lasttime) {
   let index = 0;
   let changeLeft = 0;
   if (innerWidthBinding > 460 && lasttime != null) {
-    this.angle += (time - lasttime) * this.sideSpeed;
+    this.angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(this.angle) * 60;
   }
   for (let ballon of this.list) {
     if (lasttime != null && reset == 'not') {
-      this.topValues[index] = this.topValues[index] - (time - lasttime) * this.upSpeed;
+      this.topValues[index] = this.topValues[index] - (time - lasttime) * upSpeed;
     }
     if (this.leftValues[index] > maxLeft) {
       this.leftValues[index] = Math.floor(Math.random() * maxLeft);
@@ -417,7 +395,7 @@ Backbirds.prototype.update = function (birdsizechange) {
   for (let bird of this.list) {
     if (this.topValues[i] > -50) {
       this.topValues[i] -= 0.2;
-      this.leftValues[i] += 0.02;
+      this.leftValues[i] += 0.02; 
       bird.style.top = this.topValues[i] + 'px';
       bird.style.left = this.leftValues[i] + 'px';
       if (show[i] < 1) {
@@ -522,7 +500,7 @@ function runGame(gameState, event) {
     if (sun.status.top > -50) {
       sun.update()
     }
-    gameState.ballons.update(status.reset, status.maxLeft,
+    gameState.ballons.update(status.reset, status.maxLeft,status.upSpeed, status.sideSpeed,
       time, lasttime)
     gameState.ballons.resetPosition(status.maxLeft);
     status.reset = "not";
@@ -552,10 +530,28 @@ function main() {
   // First argument to Ballons.create and Backbirds.create tell how much number of ballons or 
   // backbirds to create.
 
-  let ballons = Ballons.create(12, preStatus.upSpeed, preStatus.sideSpeed);
+  let ballons = Ballons.create(12);
   let backbirds = Backbirds.create(12);
-  let sun = new Sun(DOM.sunDiv)
-  let gameState = new GameState(DOM, preStatus, ballons, backbirds, sun);
+  let sun = new Sun(DOM.sunDiv);
+  const preStatus = {
+    reset: "not",
+    resetrun: 0,
+    round: 1,
+    scoreCount: 0,
+    level: 1,
+    gameOut: false,
+    angle: Math.PI,
+    upSpeed: 0.1,         //for ballons
+    sideSpeed: 0.001,     //ballons
+    birdsizechange: 0.0012,
+    gameRunCount: 0,
+  }
+  const levelChanges = {
+    upSpeed: 0.001,
+    sideSpeed : 0.0001,
+    level : 10, // each 10 score will increase level;
+  }   
+  let gameState = new GameState(DOM, preStatus, levelChanges, ballons, backbirds, sun);
   setEvents(gameState);
   if (innerWidthBinding > 460) {
     setInterval(() => {
