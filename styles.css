@@ -135,7 +135,7 @@ h1 {
 .bal {
   font-size: 6rem;
   display: inline;
-  position: absolute;
+  position: fixed;
   z-index: 3;
   box-sizing:border-box;
   width: min-content;

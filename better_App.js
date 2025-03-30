@@ -355,7 +355,7 @@ function setEvents(gameState) {
 Ballons.prototype.update = function (reset, maxLeft, upSpeed, sideSpeed, time, lasttime) {
   let index = 0;
   let changeLeft = 0;
-  if (innerWidthBinding > 460 && lasttime != null) {
+  if (lasttime != null) {
     this.angle += (time - lasttime) * sideSpeed;
     changeLeft = Math.cos(this.angle) * 60;
   }
@@ -488,14 +488,14 @@ function runGame(gameState, event) {
   status.gameRunCount += 1;
   innerWidthBinding = innerWidth;
   let offsetWidthbinding = gameState.ballons.list[0].offsetWidth;
-  status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+  status.maxLeft = innerWidthBinding - offsetWidthbinding;
   if (innerWidthBinding > 460) {
     dom.backbirdDiv.style.display = 'block';
   }
   status.animation = requestAnimationFrame(move);
 
   function move(time, lasttime) {
-    status.maxLeft = innerWidthBinding - offsetWidthbinding - 40;
+    status.maxLeft = innerWidthBinding - offsetWidthbinding;
     if (innerWidthBinding > 460) {
       gameState.backBirds.update(status.birdsizechange);
     }
@@ -588,13 +588,13 @@ function main() {
     level: 1,
     gameOut: false,
     angle: Math.PI,
-    upSpeed: 0.1,                //for ballons
+    upSpeed: 0.12,                //for ballons
     sideSpeed: 0.001,            //ballons
     birdsizechange: 0.0012,
     gameRunCount: 0,
   }
   const levelChanges = {
-    upSpeed: 0.007,
+    upSpeed: 0.014,
     sideSpeed: 0.0001,
     level: 10,                   // each 10 score will increase level;
   }
