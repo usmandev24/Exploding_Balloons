@@ -1,80 +1,142 @@
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exploding Balloons</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="images/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="images/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="Balloons" />
+    <link rel="manifest" href="images/favicon/site.webmanifest" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exploding Balloons</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-  <header>
-    <nav>
-      <ul>
-        <li id='manu'><img id='imgmanu' src="images/manuc.png"></li>
-        <li id='pauseResumeli'><button id='pauseResume'>Play</button></li>
-        <li id='level' style="color:darkblue">Level: 1</li>
-        <li id="score">Score: 0</li>
-      </ul>
-      <div id="manuItems">
+  <body>
+    <header>
+      <nav>
         <ul>
-          <p id='pman'><span style="font-size: 1.4rem;padding: 2px;color: darkred;">Exploading Balloons</span>
-            <img id='imgclose' src="images/close.png" style="margin-right: -20px;">
-          </p>
-          <Li id="linktohome">Home Page</Li>
-          <li><a href="https://github.com/usmandev24/Exploding_Balloons" target="_blank">GitHub</a></li>
-          <li><a href="mailto:usman.dev24@gmail.com" target="_blank">Email</a></li>
-          <li><a href="https://github.com/usmandev24" target="_blank">About</a></li>
+          <li id="manu"><img id="imgmanu" src="images/manuc.png" /></li>
+          <li id="pauseResumeli"><button id="pauseResume">Play</button></li>
+          <li id="level" style="color: darkblue">Level: 1</li>
+          <li id="score">Score: 0</li>
         </ul>
-      </div>
-    </nav>
-  </header>
+        <div id="manuItems">
+          <ul>
+            <p id="pman">
+              <span style="font-size: 1.4rem; padding: 2px; color: darkred"
+                >Exploading Balloons</span
+              >
+              <img
+                id="imgclose"
+                src="images/close.png"
+                style="margin-right: -20px"
+              />
+            </p>
+            <li id="linktohome">Home Page</li>
+            <li>
+              <a
+                href="https://github.com/usmandev24/Exploding_Balloons"
+                target="_blank"
+                >GitHub</a
+              >
+            </li>
+            <li>
+              <a href="mailto:usman.dev24@gmail.com" target="_blank">Email</a>
+            </li>
+            <li>
+              <a href="https://github.com/usmandev24" target="_blank">About</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
 
-  <div id="homepage" style="text-align: center;">
-    <h1>Exploading Balloons</h1>
-    <p style="font-size: 1.2rem; background-color: #e4fcd0;padding: 1rem;
-    border-radius: 10px;">This is simple yet intersting game made with using pure <span style="font-variant: small-caps; color: #000a94;">JavaScript, HTML and CSS. </span><br>You will click to explode
-      the moving Balloons as you explode more your score and level will increase.
-      Game desing is responsive and optimized for all type of devices.
-    </p>
-    
-    <div id='note'>
-      <P style="font-size: 1.3rem;color: rgb(0, 0, 0);background-color: #ffdfdf;
-     border-radius: 10px;"><span style="font-weight: bold; color: darkred;">Note : </span>Do not try to explode
-        any Bird but only balloons.
+    <div id="homepage" style="text-align: center">
+      <h1>Exploading Balloons</h1>
+      <p
+        style="
+          font-size: 1.2rem;
+          background-color: #e4fcd0;
+          padding: 1rem;
+          border-radius: 10px;
+        "
+      >
+        This is simple yet intersting game made with using pure
+        <span style="font-variant: small-caps; color: #000a94"
+          >JavaScript, HTML and CSS. </span
+        ><br />You will click to explode the moving Balloons as you explode more
+        your score and level will increase. Game desing is responsive and
+        optimized for all type of devices.
       </p>
-      <button id='start' class="play">Play</button>
+
+      <div id="note">
+        <p
+          style="
+            font-size: 1.3rem;
+            color: rgb(0, 0, 0);
+            background-color: #ffdfdf;
+            border-radius: 10px;
+          "
+        >
+          <span style="font-weight: bold; color: darkred">Note : </span>Do not
+          try to explode any Bird but only balloons.
+        </p>
+        <button id="start" class="play">Play</button>
+      </div>
+      <div id="audio" style="display: none">
+        <audio src="sound/backsound.wav" id="backsound" loop></audio>
+        <audio src="sound/shoot.mp3" id="shootsound"></audio>
+        <audio src="sound/over.mp3" id="oversound"></audio>
+      </div>
+      <footer>
+        <p>
+          Last modified 02-04-2025. MIT License copyright © 2025
+          <a
+            id="fa"
+            href="https://github.com/usmandev24/Exploding_Balloons"
+            target="_blank"
+            style="text-decoration: none; color: #6666fd"
+            >usmandev24</a
+          >
+        </p>
+      </footer>
     </div>
-    <div id = "audio" style="display: none;">
-      <audio src="sound/backsound.wav" id="backsound" loop></audio>
-      <audio src="sound/shoot.mp3"  id="shootsound"></audio>
-      <audio src="sound/over.mp3" id = "oversound"></audio>
+    <div id="birddiv"></div>
+    <div id="sun"></div>
+    <div id="clouds">
+      <img id="dclouds" src="images/dclouds.png" alt="clouds" />
+      <img id="mclouds" src="images/mobileClouds.png" alt="clouds" />
     </div>
-    <footer>
-      <p>Last modified 16-02-2025. MIT License copyright © 2025 <a id="fa" href="https://github.com/usmandev24/Exploding_Balloons" target="_blank" style="
-        text-decoration: none;color:#6666fd;">usmandev24</a></p> 
-    </footer>
-  </div>
-  <div id="birddiv"></div>
-  <div id="sun"></div>
-  <div id="clouds">
-    <img id = 'dclouds'src="images/dclouds.png" alt="clouds">
-    <img id ='mclouds' src="images/mobileClouds.png" alt="clouds">
-  </div>
-  <div id="game">
+    <div id="game"></div>
+    <div id="gameOver">
+      <h2>Game Over</h2>
+      <h3>Do not Try to Explode anything except Balloons</h3>
+      <h4 id="tscore">Score:</h4>
+      <button class="play" id="again">Start Again</button>
+    </div>
+    <div
+      id="cover"
+      style="
+        display: none;
+        position: absolute;
+        width: 100vw;
+        height: 90vh;
+        z-index: 0;
+        top: 3rem;
+        left: 0;
+      "
+    ></div>
 
-  </div>
-  <div id="gameOver">
-    <h2>Game Over</h2>
-    <h3>Do not Try to Explode anything except Balloons</h3>
-    <h4 id ='tscore'>Score: </h4>
-    <button class="play" id='again'>Start Again</button>
-  </div>
-  <div id="cover" style="display: none;position: absolute
-  ;width: 100vw;height: 90vh;z-index: 0; top: 3rem;left: 0;"></div>
-
-  <script src="better_App.js">
-  </script>
-</body>
-
+    <script src="better_App.js"></script>
+  </body>
 </html>

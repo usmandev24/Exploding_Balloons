@@ -594,8 +594,8 @@ function main() {
     gameRunCount: 0,
   }
   const levelChanges = {
-    upSpeed: 0.014,
-    sideSpeed: 0.0001,
+    upSpeed: 0.01,
+    sideSpeed: 0.0002,
     level: 10,                   // each 10 score will increase level;
   }
   let gameState = new GameState(DOM, preStatus, levelChanges, ballons, backbirds, sun);
