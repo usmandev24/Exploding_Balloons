@@ -39,6 +39,10 @@ To play the game locally:
 
 Experience the game online: [Exploding Balloons Live Demo](https://usmandev24.github.io/Exploding_Balloons/)
 
+## ScreenShots 
+![image](https://github.com/user-attachments/assets/7acc4ce8-50f7-410f-8a53-82f7b7eb7dc5)
+Game over: ![image](https://github.com/user-attachments/assets/c91e0b94-6d1c-4285-a5fe-c8ae1c28e7a9)
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/usmandev24/Exploding_Balloons/blob/main/LICENSE) file for details.
